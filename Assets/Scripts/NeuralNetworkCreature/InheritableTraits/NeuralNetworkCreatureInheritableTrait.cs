@@ -23,6 +23,7 @@ public class NeuralNetworkCreatureInheritableTrait : INeuralNeworkCreatureInheri
 		Name = name;
 		return Name;
 	}
+
 	public float GetValue()
 	{
 		return Value;

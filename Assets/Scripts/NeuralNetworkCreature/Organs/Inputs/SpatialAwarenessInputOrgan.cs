@@ -24,7 +24,7 @@ public class SpatialAwarenessInputOrgan : NeuralNetworkCreatureInputOrgan
 	{
 		foreach (KeyValuePair<string, NeuralNetworkCreatureInputSensor> kvp in _sensors)
 		{
-			switch (kvp.Value.Name)
+			switch (kvp.Value.GetName())
 			{
 				case "X":
 					kvp.Value.SetValue(_creature.transform.position.x);

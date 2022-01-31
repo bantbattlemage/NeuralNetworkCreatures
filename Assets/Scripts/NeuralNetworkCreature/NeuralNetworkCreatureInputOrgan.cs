@@ -10,14 +10,14 @@ public class NeuralNetworkCreatureInputOrgan : NeuralNetworkCreatureOrgan, INeur
 
 		for (int i = 0; i < sensors.Length; i++)
 		{
-			_sensors.Add(sensors[i].Name, sensors[i]);
+			_sensors.Add(sensors[i].GetName(), sensors[i]);
 		}
 
 		return this;
 	}
 
 	/// <summary>
-	/// Run the organs function to update it's sensor values. Called when the creature's NeuralNetwork is processed. (Empty if organ does not define function)
+	/// Run the organs function to update it's sensor values. Called when the creature's NeuralNetwork is processed. (Empty if organ implementation does not define function)
 	/// </summary>
 	public virtual void UpdateSensors()
 	{

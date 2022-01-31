@@ -17,7 +17,7 @@ public class NeuralNetworkCreatureOutputOrgan : NeuralNetworkCreatureOrgan, INeu
 	}
 
 	/// <summary>
-	/// Run the organs function to perform an action based on it's OutputValue. Called when the creature's NeuralNetwork is processed. (Empty if organ does not define function)
+	/// Run the organs function to perform an action based on it's OutputValue. Called when the creature's NeuralNetwork is processed. (Empty if organ implementation does not define function)
 	/// </summary>
 	public virtual void Process()
 	{
