@@ -14,7 +14,7 @@ public class NeuralNetworkCreatureOutputOrgan : NeuralNetworkCreatureOrgan, INeu
 	/// </summary>
 	public NeuralNetworkCreatureOutputOrgan Initialize(string name)
 	{
-		Name = name;
+		SetName(name);
 		Emitter = new NeuralNetworkCreatureOutputEmitter();
 		Emitter.Initialize(name);
 

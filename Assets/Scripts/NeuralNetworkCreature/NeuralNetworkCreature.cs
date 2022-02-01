@@ -55,7 +55,7 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	{
 		if (traits != null)
 		{
-			ApplyTraits(traits);
+			InitializeTraits(traits);
 		}
 		else
 		{
@@ -80,24 +80,24 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		//	Initialize creature input organs
 		for(int i = 0; i < inputOrgans.Count; i++)
 		{
-			_inputOrgans.Add(inputOrgans[i].Name, inputOrgans[i]);
+			_inputOrgans.Add(inputOrgans[i].GetName(), inputOrgans[i]);
 		}
 
 		//	Initialize creature output organs
 		for (int i = 0; i < outputOrgans.Count; i++)
 		{
-			_outputOrgans.Add(outputOrgans[i].Name, outputOrgans[i]);
+			_outputOrgans.Add(outputOrgans[i].GetName(), outputOrgans[i]);
 		}
 
 		_initialized = true;
 	}
 
 	/// <summary>
-	/// Initialize the NeuralNetwork using the given network. (Does not create a copy, create or copy the network first)
+	/// Initialize the NeuralNetwork with a given parent and inherit values from it. (Does not create a copy, create a new network first then call this to initialize it)
 	/// </summary>
-	public void Initialize(NeuralNetwork network, List<NeuralNetworkCreatureInheritableTrait> traits)
+	public void Initialize(NeuralNetwork network, NeuralNetworkCreature parent)
 	{
-		ApplyTraits(traits);
+		InitializeTraits(parent.GetTraits());
 
 		Network = network;
 		_internalLayers = network.Layers.Length - 2;
@@ -122,13 +122,15 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		//	Initialize creature input organs
 		for (int i = 0; i < inputOrgans.Count; i++)
 		{
-			_inputOrgans.Add(inputOrgans[i].Name, inputOrgans[i]);
+			_inputOrgans.Add(inputOrgans[i].GetName(), inputOrgans[i]);
 		}
 
 		//	Initialize creauture output organs
 		for (int i = 0; i < outputOrgans.Count; i++)
 		{
-			_outputOrgans.Add(outputOrgans[i].Name, outputOrgans[i]);
+			outputOrgans[i].SetValue(parent._outputOrgans[outputOrgans[i].GetName()].GetValue());	//	set the internal organ modifier value to the parent's value
+			outputOrgans[i].Mutate();
+			_outputOrgans.Add(outputOrgans[i].GetName(), outputOrgans[i]);
 		}
 
 		_initialized = true;
@@ -139,20 +141,20 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		foreach(NeuralNetworkCreatureTraitScriptableObject t in InheritableTraits)
 		{
 			NeuralNetworkCreatureInheritableTrait trait = t.Instantiate(this);
-			trait.MutateTraitValue();
+			trait.Mutate();
 			trait.ApplyTraitValue();
-			_traits.Add(trait.Name, trait);
+			_traits.Add(trait.GetName(), trait);
 		}
 	}
 
-	public void ApplyTraits(List<NeuralNetworkCreatureInheritableTrait> inheritedTraits)
+	public void InitializeTraits(List<NeuralNetworkCreatureInheritableTrait> inheritedTraits)
 	{
 		foreach (NeuralNetworkCreatureInheritableTrait trait in inheritedTraits)
 		{
 			NeuralNetworkCreatureInheritableTrait newTrait = trait.CreateDeepCopy(this);
-			newTrait.MutateTraitValue();
+			newTrait.Mutate();
 			newTrait.ApplyTraitValue();
-			_traits.Add(newTrait.Name, newTrait);
+			_traits.Add(newTrait.GetName(), newTrait);
 		}
 	}
 
@@ -195,6 +197,25 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		}
 	}
 
+	public void Mutate(int mutationChance, float mutationStrength)
+	{
+		Network.Mutate(mutationChance, mutationStrength);
+
+		foreach (NeuralNetworkCreatureOutputOrgan o in _outputOrgans.Values)
+		{
+			o.Mutate();
+		}
+	}
+
+	public NeuralNetworkCreature Reproduce(NeuralNetworkCreature otherParent, Vector3 location)
+	{
+		NeuralNetworkCreature newCreature = Instantiate(gameObject, location, new Quaternion()).GetComponent<NeuralNetworkCreature>();
+		newCreature.Initialize(Network.CreateChildNetwork(otherParent.Network), this);
+		newCreature.Mutate(GameController.Instance.MutationChance, GameController.Instance.MutationStrength);
+		return newCreature;
+	}
+
+
 	/// <summary>
 	/// Triggers OnCreatureCollision event callback that organs can subscribe to
 	/// </summary>
@@ -208,7 +229,7 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 
 	private void OnDestroy()
 	{
-		GameObject.Destroy(GetComponent<MeshRenderer>().material);
+		Destroy(GetComponent<MeshRenderer>().material);
 	}
 
 	/// <summary>

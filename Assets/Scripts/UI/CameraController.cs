@@ -12,6 +12,7 @@ public class CameraController : MonoBehaviour
     private float _currentDistance;
     private Vector3 _previousPosition;
     private float _scrollFactor = 20;
+    private bool _dragging = false;
 
 	private void Start()
 	{
@@ -25,7 +26,7 @@ public class CameraController : MonoBehaviour
 
 	void Update()
     {
-        if(UIFunctions.IsPointerOverUI || !UIFunctions.IsMouseOverGameWindow)
+        if (!UIFunctions.IsMouseOverGameWindow)
 		{
             return;
 		}
@@ -33,11 +34,14 @@ public class CameraController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             _previousPosition = _camera.ScreenToViewportPoint(Input.mousePosition);
+
+            if(!UIFunctions.IsPointerOverUI)
+			{
+                _dragging = true;
+			}
         }
         else if (Input.mouseScrollDelta.y > 0 && _currentDistance > MinimumDistanceToTarget)
         {
-            _previousPosition = _camera.ScreenToViewportPoint(Input.mousePosition);
-
             if(_currentDistance - (_scrollFactor) >= MinimumDistanceToTarget)
 			{
                 _currentDistance -= _scrollFactor;
@@ -49,8 +53,6 @@ public class CameraController : MonoBehaviour
         }
         else if (Input.mouseScrollDelta.y < 0 && _currentDistance < MaxDistanceToTarget)
         {
-            _previousPosition = _camera.ScreenToViewportPoint(Input.mousePosition);
-
             if (_currentDistance + (_scrollFactor) <= MaxDistanceToTarget)
             {
                 _currentDistance += _scrollFactor;
@@ -61,25 +63,29 @@ public class CameraController : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButton(0) || Input.mouseScrollDelta.y != 0)
+        if (((Input.GetMouseButton(0) && _dragging) || Input.mouseScrollDelta.y != 0) && !UIFunctions.IsPointerOverUI)
         {
             Vector3 newPosition = _camera.ScreenToViewportPoint(Input.mousePosition);
             Vector3 direction = _previousPosition - newPosition;
+            _previousPosition = newPosition;
 
             float rotationAroundYAxis = -direction.x * 180; // camera moves horizontally
             float rotationAroundXAxis = direction.y * 180; // camera moves vertically
 
             _camera.transform.position = Target.position;
 
-            if(Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0))
 			{
                 _camera.transform.Rotate(new Vector3(1, 0, 0), rotationAroundXAxis);
                 _camera.transform.Rotate(new Vector3(0, 1, 0), rotationAroundYAxis, Space.World);
             }
 
             _camera.transform.Translate(new Vector3(0, 0, -_currentDistance));
-
-            _previousPosition = newPosition;
         }
+
+        if (Input.GetMouseButtonUp(0) && _dragging)
+		{
+            _dragging = false;
+		}
     }
 }

@@ -25,9 +25,8 @@ public class NeuralNetworkCreatureVariable : INeuralNetworkCreatureVariable
 		return _name;
 	}
 
-	public string SetName(string name)
+	public void SetName(string name)
 	{
 		_name = name;
-		return _name;
 	}
 }

@@ -11,7 +11,7 @@ public class NeuralNetworkCreatureInputOrgan : NeuralNetworkCreatureOrgan, INeur
 
 	public NeuralNetworkCreatureInputOrgan Initialize(string name, NeuralNetworkCreatureInputSensor[] sensors)
 	{
-		Name = name;
+		SetName(name);
 
 		for (int i = 0; i < sensors.Length; i++)
 		{

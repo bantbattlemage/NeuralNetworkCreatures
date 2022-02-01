@@ -50,6 +50,16 @@ public class GameController : MonoBehaviour
 		//}
 	}
 
+	public float RollMutationFactor()
+	{
+		if(Random.Range(0, 100) < MutationChance)
+		{
+			return Random.Range(-MutationStrength, MutationStrength);
+		}
+
+		return 0;
+	}
+
 	private void SpawnPellets()
 	{
 		_pellets = new List<PelletObject>();
@@ -70,7 +80,7 @@ public class GameController : MonoBehaviour
 		{
 			if(_pellets[i] != null)
 			{
-				GameObject.Destroy(_pellets[i].gameObject);
+				Destroy(_pellets[i].gameObject);
 				remainingPellets++;
 			}
 		}
@@ -107,11 +117,14 @@ public class GameController : MonoBehaviour
 			{
 				Vector3 randomCoords = new Vector3(Random.Range(0, WorldSize.x - 5) - WorldSize.x / 2, 0, Random.Range(0, WorldSize.y - 5) - WorldSize.y / 2);
 
-				NeuralNetworkCreature newCreature = Instantiate(NeuralNetworkCreaturePrefab, randomCoords, new Quaternion()).GetComponent<NeuralNetworkCreature>();
+				//NeuralNetworkCreature newCreature = Instantiate(NeuralNetworkCreaturePrefab, randomCoords, new Quaternion()).GetComponent<NeuralNetworkCreature>();
+				//NeuralNetworkCreature father = sortedObjects[Random.Range(0, i)];
+				//NeuralNetwork childNetwork = sortedObjects[i].Network.CreateChildNetwork(father.Network);
+				//newCreature.Initialize(childNetwork, father.GetTraits());
+				//newCreature.Mutate(MutationChance, MutationStrength);
+
 				NeuralNetworkCreature father = sortedObjects[Random.Range(0, i)];
-				NeuralNetwork childNetwork = sortedObjects[i].Network.CreateChildNetwork(father.Network);
-				newCreature.Initialize(childNetwork, father.GetTraits());
-				newCreature.Network.Mutate(MutationChance, MutationStrength);
+				NeuralNetworkCreature newCreature = sortedObjects[i].Reproduce(father, randomCoords);
 				newGeneration.Add(newCreature);
 
 				if(newGeneration.Count >= Population)
@@ -123,8 +136,8 @@ public class GameController : MonoBehaviour
 
 		foreach(NeuralNetworkCreature old in _creatures)
 		{
-			GameObject.Destroy(old);
-			GameObject.Destroy(old.gameObject);
+			Destroy(old);
+			Destroy(old.gameObject);
 		}
 
 		_creatures = new List<NeuralNetworkCreature>();

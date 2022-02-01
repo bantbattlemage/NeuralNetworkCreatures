@@ -2,11 +2,9 @@ using UnityEngine;
 
 public class BasicMovementOutputOrgan : NeuralNetworkCreatureOutputOrgan
 {
-	public float Speed;
-	
 	public BasicMovementOutputOrgan(float speed, NeuralNetworkCreature creature) : base(creature)
 	{
-		Speed = speed;
+		_value = speed;
 		_creature = creature;
 		Initialize("BasicMovement");
 	}
@@ -18,7 +16,7 @@ public class BasicMovementOutputOrgan : NeuralNetworkCreatureOutputOrgan
 
 	public void MoveForward()
 	{
-		Vector3 newPosition = _creature.transform.position + (_creature.transform.forward * Speed * GetOutputValue());
+		Vector3 newPosition = _creature.transform.position + (_creature.transform.forward * _value * GetOutputValue());
 
 		if(!GameController.Instance.IsOutOfBounds(newPosition))
 		{

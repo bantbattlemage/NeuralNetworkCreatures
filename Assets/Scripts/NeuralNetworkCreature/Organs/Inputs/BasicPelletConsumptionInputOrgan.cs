@@ -19,7 +19,7 @@ public class BasicPelletConsumptionInputOrgan : NeuralNetworkCreatureInputOrgan
 			_creature.Network.Fitness++;
 			_sensors["HasEaten"].SetValue(1);
 			_creature.ProcessNetworkInputs();
-			GameObject.Destroy(collision.gameObject);
+			Object.Destroy(collision.gameObject);
 		}
 	}
 

@@ -9,7 +9,7 @@ public class ColorTrait : NeuralNetworkCreatureInheritableTrait
 	{
 		_creature = creature;
 		_colorValue = c;
-		Name = "Color";
+		SetName("Color");
 	}
 
 	public override NeuralNetworkCreatureInheritableTrait CreateDeepCopy(NeuralNetworkCreature creature)
@@ -27,10 +27,10 @@ public class ColorTrait : NeuralNetworkCreatureInheritableTrait
 		}
 	}
 
-	public override void MutateTraitValue()
+	public override void Mutate()
 	{
-		_colorValue.r += Random.Range(0, 100) < GameController.Instance.MutationChance ? Random.Range(-GameController.Instance.MutationStrength, GameController.Instance.MutationStrength) : 0;
-		_colorValue.b += Random.Range(0, 100) < GameController.Instance.MutationChance ? Random.Range(-GameController.Instance.MutationStrength, GameController.Instance.MutationStrength) : 0;
-		_colorValue.g += Random.Range(0, 100) < GameController.Instance.MutationChance ? Random.Range(-GameController.Instance.MutationStrength, GameController.Instance.MutationStrength) : 0;
+		_colorValue.r += GameController.Instance.RollMutationFactor();
+		_colorValue.b += GameController.Instance.RollMutationFactor();
+		_colorValue.g += GameController.Instance.RollMutationFactor();
 	}
 }
