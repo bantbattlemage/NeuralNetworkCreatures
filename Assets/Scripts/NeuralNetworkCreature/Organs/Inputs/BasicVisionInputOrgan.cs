@@ -2,13 +2,12 @@ using UnityEngine;
 
 public class BasicVisionInputOrgan : NeuralNetworkCreatureInputOrgan
 {
-	private NeuralNetworkCreature _creature;
 	private float _visionDistance;
 
 	/// <summary>
 	/// The BasicVisionOrgan gives the NeuralNetwork an input value of the distance to any Pellets hit by [sensorCount] rays radiating from the sphere
 	/// </summary>
-	public BasicVisionInputOrgan(NeuralNetworkCreature creature, int sensorCount, float visionDistance)
+	public BasicVisionInputOrgan(NeuralNetworkCreature creature, int sensorCount, float visionDistance) : base(creature)
 	{
 		_creature = creature;
 		_visionDistance = visionDistance;

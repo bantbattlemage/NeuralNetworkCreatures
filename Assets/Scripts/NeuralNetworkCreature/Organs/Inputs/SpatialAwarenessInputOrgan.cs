@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class SpatialAwarenessInputOrgan : NeuralNetworkCreatureInputOrgan
 {
-	private NeuralNetworkCreature _creature;
-
-	public SpatialAwarenessInputOrgan(NeuralNetworkCreature creature)
+	public SpatialAwarenessInputOrgan(NeuralNetworkCreature creature) : base(creature)
 	{
 		_creature = creature;
 

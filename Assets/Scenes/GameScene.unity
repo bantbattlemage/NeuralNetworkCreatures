@@ -358,6 +358,18 @@ PrefabInstance:
       propertyPath: TimeScaler
       value: 
       objectReference: {fileID: 985158935}
+    - target: {fileID: 6358456644245974485, guid: 324c61a8257be794cbb222009c954aeb, type: 3}
+      propertyPath: WorldFloor
+      value: 
+      objectReference: {fileID: 1604268304}
+    - target: {fileID: 6358456644245974485, guid: 324c61a8257be794cbb222009c954aeb, type: 3}
+      propertyPath: WorldSize.x
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 6358456644245974485, guid: 324c61a8257be794cbb222009c954aeb, type: 3}
+      propertyPath: WorldSize.y
+      value: 200
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 324c61a8257be794cbb222009c954aeb, type: 3}
 --- !u!224 &985158932 stripped
@@ -376,6 +388,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d8f57ddb7863049bfd621ccc63d178, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1604268304 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 355100251548439623, guid: f8dc2ca642cfe8b43b5c0a93adb4b5a4, type: 3}
+  m_PrefabInstance: {fileID: 355100251633809785}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1891902389 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7797144637179424086, guid: f74668aebf838db4fbc96c302a187730, type: 3}

@@ -4,6 +4,11 @@ public class NeuralNetworkCreatureOutputOrgan : NeuralNetworkCreatureOrgan, INeu
 {
 	public NeuralNetworkCreatureOutputEmitter Emitter { get; private set; }
 
+	public NeuralNetworkCreatureOutputOrgan(NeuralNetworkCreature creature) : base(creature)
+	{
+
+	}
+
 	/// <summary>
 	/// Iniitialize the organ with the given name.
 	/// </summary>

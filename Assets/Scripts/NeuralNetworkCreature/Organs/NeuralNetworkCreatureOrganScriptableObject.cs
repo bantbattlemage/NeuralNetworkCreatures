@@ -12,7 +12,7 @@ public class NeuralNetworkCreatureOrganScriptableObject : ScriptableObject
 		switch (Organ)
 		{
 			case NeuralNetworkCreatureOrganType.Heartbeat:
-				return new HeartbeatInputOrgan();
+				return new HeartbeatInputOrgan(creature);
 			case NeuralNetworkCreatureOrganType.SpatialAwareness:
 				return new SpatialAwarenessInputOrgan(creature);
 			case NeuralNetworkCreatureOrganType.BasicMovement:
@@ -24,15 +24,15 @@ public class NeuralNetworkCreatureOrganScriptableObject : ScriptableObject
 			case NeuralNetworkCreatureOrganType.BasicPelletConsumption:
 				return new BasicPelletConsumptionInputOrgan(creature);
 			case NeuralNetworkCreatureOrganType.GenericInput:
-				NeuralNetworkCreatureInputOrgan io = new NeuralNetworkCreatureInputOrgan();
+				NeuralNetworkCreatureInputOrgan io = new NeuralNetworkCreatureInputOrgan(creature);
 				io.SetName(Random.Range(0f, 10000f).ToString());
 				return io;
 			case NeuralNetworkCreatureOrganType.GenericOutput:
-				NeuralNetworkCreatureOutputOrgan oo = new NeuralNetworkCreatureOutputOrgan();
+				NeuralNetworkCreatureOutputOrgan oo = new NeuralNetworkCreatureOutputOrgan(creature);
 				oo.SetName(Random.Range(0f, 10000f).ToString());
 				return oo;
 			default:
-				return new NeuralNetworkCreatureOrgan();
+				return new NeuralNetworkCreatureOrgan(creature);
 		}
 	}
 }

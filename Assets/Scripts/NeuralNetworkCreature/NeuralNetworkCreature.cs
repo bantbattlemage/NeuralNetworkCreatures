@@ -57,10 +57,19 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	/// </summary>
 	public void Initialize(List<NeuralNetworkCreatureInputOrgan> inputOrgans, List<NeuralNetworkCreatureOutputOrgan> outputOrgans, List<NeuralNetworkCreatureInheritableTrait> traits = null, int internalLayers = 2, int internalLayerSize = 8)
 	{
+		if (traits != null)
+		{
+			ApplyTraits(traits);
+		}
+		else
+		{
+			ApplyTraits();
+		}
+
 		//	Create the Neural Network
 		_internalLayers = internalLayers;
 		_internalLayerSize = internalLayerSize;
-		int[] layers = new int[2 + _internalLayers];
+		int[] layers = new int[2 + _internalLayers];	//	1 layer for inputs, 1 layer for outputs + internal layers inbetween
 		layers[0] = inputOrgans.Sum(x => x.SensorCount);
 
 		for(int i = 0; i < _internalLayers; i++)
@@ -84,15 +93,6 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 			_outputOrgans.Add(outputOrgans[i].Name, outputOrgans[i]);
 		}
 
-		if(traits != null)
-		{
-			ApplyTraits(traits);
-		}
-		else
-		{
-			ApplyTraits();
-		}
-
 		_initialized = true;
 	}
 
@@ -101,6 +101,8 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	/// </summary>
 	public void Initialize(NeuralNetwork network, List<NeuralNetworkCreatureInheritableTrait> traits)
 	{
+		ApplyTraits(traits);
+
 		Network = network;
 		_internalLayers = network.Layers.Length - 2;
 		if (_internalLayers > 0)
@@ -133,20 +135,17 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 			_outputOrgans.Add(outputOrgans[i].Name, outputOrgans[i]);
 		}
 
-		ApplyTraits(traits);
-
 		_initialized = true;
 	}
 
 	public void ApplyTraits()
 	{
-		foreach(NeuralNetworkCreatureTraitScriptableObject trait in InheritableTraits)
+		foreach(NeuralNetworkCreatureTraitScriptableObject t in InheritableTraits)
 		{
-			NeuralNetworkCreatureInheritableTrait t = trait.Instantiate(this);
-			t.Initialize(this);
-			t.MutateTraitValue();
-			t.ApplyTraitValue();
-			_traits.Add(t.Name, t);
+			NeuralNetworkCreatureInheritableTrait trait = t.Instantiate(this);
+			trait.MutateTraitValue();
+			trait.ApplyTraitValue();
+			_traits.Add(trait.Name, trait);
 		}
 	}
 
@@ -154,10 +153,10 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	{
 		foreach (NeuralNetworkCreatureInheritableTrait trait in inheritedTraits)
 		{
-			trait.Initialize(this);
-			trait.MutateTraitValue();
-			trait.ApplyTraitValue();
-			_traits.Add(trait.Name, trait);
+			NeuralNetworkCreatureInheritableTrait newTrait = trait.CreateDeepCopy(this);
+			newTrait.MutateTraitValue();
+			newTrait.ApplyTraitValue();
+			_traits.Add(newTrait.Name, newTrait);
 		}
 	}
 

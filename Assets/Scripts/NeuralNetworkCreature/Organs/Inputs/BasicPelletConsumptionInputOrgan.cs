@@ -2,9 +2,7 @@ using UnityEngine;
 
 public class BasicPelletConsumptionInputOrgan : NeuralNetworkCreatureInputOrgan
 {
-	private NeuralNetworkCreature _creature;
-
-	public BasicPelletConsumptionInputOrgan(NeuralNetworkCreature creature)
+	public BasicPelletConsumptionInputOrgan(NeuralNetworkCreature creature) : base(creature)
 	{
 		_creature = creature;
 		creature.OnCreatureCollision += OnCollision;

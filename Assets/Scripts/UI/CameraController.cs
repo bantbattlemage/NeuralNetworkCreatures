@@ -13,8 +13,10 @@ public class CameraController : MonoBehaviour
     private Vector3 _previousPosition;
     private float _scrollFactor = 20;
 
-	private void Awake()
+	private void Start()
 	{
+        MaxDistanceToTarget = GameController.Instance.WorldSize.x;
+
         _currentDistance = MaxDistanceToTarget;
         _camera = GetComponent<Camera>();
         _camera.transform.position = Target.position;
@@ -23,6 +25,11 @@ public class CameraController : MonoBehaviour
 
 	void Update()
     {
+        if(UIFunctions.IsPointerOverUI())
+		{
+            return;
+		}
+
         if (Input.GetMouseButtonDown(0))
         {
             _previousPosition = _camera.ScreenToViewportPoint(Input.mousePosition);

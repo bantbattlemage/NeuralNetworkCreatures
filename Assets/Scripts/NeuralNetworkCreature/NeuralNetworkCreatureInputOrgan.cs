@@ -4,6 +4,11 @@ public class NeuralNetworkCreatureInputOrgan : NeuralNetworkCreatureOrgan, INeur
 {
 	protected Dictionary<string, NeuralNetworkCreatureInputSensor> _sensors = new Dictionary<string, NeuralNetworkCreatureInputSensor>();
 
+	public NeuralNetworkCreatureInputOrgan(NeuralNetworkCreature creature) : base(creature)
+	{
+		_creature = creature;
+	}
+
 	public NeuralNetworkCreatureInputOrgan Initialize(string name, NeuralNetworkCreatureInputSensor[] sensors)
 	{
 		Name = name;

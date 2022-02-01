@@ -3,9 +3,8 @@ using UnityEngine;
 public class BasicRotationOutputOrgan : NeuralNetworkCreatureOutputOrgan
 {
 	public float Speed;
-	private NeuralNetworkCreature _creature;
-
-	public BasicRotationOutputOrgan(float speed, NeuralNetworkCreature creature)
+	
+	public BasicRotationOutputOrgan(float speed, NeuralNetworkCreature creature) : base(creature)
 	{
 		Speed = speed;
 		_creature = creature;

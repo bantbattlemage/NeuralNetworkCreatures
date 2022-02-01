@@ -1,27 +1,18 @@
 using UnityEngine;
 
-public class NeuralNetworkCreatureInheritableTrait : INeuralNeworkCreatureInheritableTrait
+public class NeuralNetworkCreatureInheritableTrait : NeuralNetworkCreatureOrgan
 {
-	public string Name { get; protected set; }
 	public float Value { get; protected set; }
 
-	protected NeuralNetworkCreature _creature;
-
-	public NeuralNetworkCreatureInheritableTrait Initialize(NeuralNetworkCreature creature)
+	public NeuralNetworkCreatureInheritableTrait(NeuralNetworkCreature creature) : base(creature)
 	{
 		_creature = creature;
-		return this;
 	}
 
-	public string GetName()
+	public virtual NeuralNetworkCreatureInheritableTrait CreateDeepCopy(NeuralNetworkCreature creature)
 	{
-		return Name;
-	}
-
-	public string SetName(string name)
-	{
-		Name = name;
-		return Name;
+		NeuralNetworkCreatureInheritableTrait newTrait = new NeuralNetworkCreatureInheritableTrait(creature);
+		return newTrait;
 	}
 
 	public float GetValue()

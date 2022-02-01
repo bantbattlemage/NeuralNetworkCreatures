@@ -9,7 +9,7 @@ public class HeartbeatInputOrgan : NeuralNetworkCreatureInputOrgan
 	/// <summary>
 	/// The HeartbeatInputOrgan gives the NeuralNetral two input values; a ticking lifetime and the sin wave of that lifetime.
 	/// </summary>
-	public HeartbeatInputOrgan()
+	public HeartbeatInputOrgan(NeuralNetworkCreature creature) : base(creature)
 	{
 		NeuralNetworkCreatureInputSensor[] heartbeat = new NeuralNetworkCreatureInputSensor[2];
 

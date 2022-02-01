@@ -20,6 +20,7 @@ public class GameController : MonoBehaviour
 	[Header("Scene References")]
 	public Text UIText;
 	public TimeScaleController TimeScaler;
+	public GameObject WorldFloor;
 
 	private int _currentGeneration;
 	private List<NeuralNetworkCreature> _creatures = new List<NeuralNetworkCreature>();
@@ -148,6 +149,8 @@ public class GameController : MonoBehaviour
 		}
 
 		SpawnPellets();
+
+		WorldFloor.transform.localScale = new Vector3(WorldSize.x / 10f, 1, WorldSize.y / 10f);
 	}
 
 	public bool IsOutOfBounds(Vector3 vector)
