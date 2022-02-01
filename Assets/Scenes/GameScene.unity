@@ -362,14 +362,6 @@ PrefabInstance:
       propertyPath: WorldFloor
       value: 
       objectReference: {fileID: 1604268304}
-    - target: {fileID: 6358456644245974485, guid: 324c61a8257be794cbb222009c954aeb, type: 3}
-      propertyPath: WorldSize.x
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 6358456644245974485, guid: 324c61a8257be794cbb222009c954aeb, type: 3}
-      propertyPath: WorldSize.y
-      value: 200
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 324c61a8257be794cbb222009c954aeb, type: 3}
 --- !u!224 &985158932 stripped

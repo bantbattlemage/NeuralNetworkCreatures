@@ -45,7 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Timescale: 5
   GenerationDuration: 10
-  WorldSize: {x: 100, y: 100}
+  WorldSize: {x: 200, y: 200}
   Population: 100
   MutationChance: 5
   MutationStrength: 0.04
@@ -53,3 +53,4 @@ MonoBehaviour:
   PelletPrefab: {fileID: 5102762972465418086, guid: 19f4e98379d565840960bc38d15ac262, type: 3}
   UIText: {fileID: 0}
   TimeScaler: {fileID: 0}
+  WorldFloor: {fileID: 0}

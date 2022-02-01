@@ -30,7 +30,7 @@ public class NeuralNetworkCreatureOutputOrgan : NeuralNetworkCreatureOrgan, INeu
 	}
 
 	/// <summary>
-	/// Return the current value of the emitter;
+	/// Return the current value of the associated NeuralNetwork output node
 	/// </summary>
 	public float GetOutputValue()
 	{

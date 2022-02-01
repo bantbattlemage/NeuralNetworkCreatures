@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour
 
 	void Update()
     {
-        if(UIFunctions.IsPointerOverUI())
+        if(UIFunctions.IsPointerOverUI || !UIFunctions.IsMouseOverGameWindow)
 		{
             return;
 		}

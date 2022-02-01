@@ -16,9 +16,9 @@ public class NeuralNetworkCreatureOrganScriptableObject : ScriptableObject
 			case NeuralNetworkCreatureOrganType.SpatialAwareness:
 				return new SpatialAwarenessInputOrgan(creature);
 			case NeuralNetworkCreatureOrganType.BasicMovement:
-				return new BasicMovementOutputOrgan(creature.MovementSpeed, creature);
+				return new BasicMovementOutputOrgan(ConfigurableFloat, creature);
 			case NeuralNetworkCreatureOrganType.BasicRotation:
-				return new BasicRotationOutputOrgan(creature.RotationSpeed, creature);
+				return new BasicRotationOutputOrgan(ConfigurableFloat, creature);
 			case NeuralNetworkCreatureOrganType.BasicVision:
 				return new BasicVisionInputOrgan(creature, ConfigurableInt, ConfigurableFloat);
 			case NeuralNetworkCreatureOrganType.BasicPelletConsumption:

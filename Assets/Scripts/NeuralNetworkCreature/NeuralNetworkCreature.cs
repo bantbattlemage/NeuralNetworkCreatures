@@ -6,9 +6,6 @@ using UnityEngine;
 public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 {
 	[Header("Prefab Settings")]
-	public float MovementSpeed;
-	public float RotationSpeed;
-
 	public List<NeuralNetworkCreatureOrganScriptableObject> InputOrgans;
 	public List<NeuralNetworkCreatureOrganScriptableObject> OutputOrgans;
 	public List<NeuralNetworkCreatureTraitScriptableObject> InheritableTraits;
@@ -17,7 +14,6 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	protected bool _initialized = false;
 	protected int _internalLayers;
 	protected int _internalLayerSize;
-	public float ScaleFactor { get; protected set; }
 
 	//	Organ dictionaries
 	protected Dictionary<string, NeuralNetworkCreatureInputOrgan> _inputOrgans = new Dictionary<string, NeuralNetworkCreatureInputOrgan>();

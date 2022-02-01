@@ -42,10 +42,11 @@ public class GameController : MonoBehaviour
 
 	private void Update()
 	{
-		//if(Input.GetKeyDown(KeyCode.S))
+		//if (Input.GetKeyDown(KeyCode.S))
 		//{
 		//	NeuralNetworkCreature best = _creatures.OrderByDescending(x => x.Network.Fitness).First();
-		//	best.Network.Save("Assets/SaveData/" + System.DateTime.Now.ToString("MM-dd-HH-ss") + ".txt");
+		//	NeuralNetworkCreatureScriptableObject.SaveCreatureToScriptableObject(best);
+		//	//best.Network.Save("Assets/SaveData/" + System.DateTime.Now.ToString("MM-dd-HH-ss") + ".txt");
 		//}
 	}
 

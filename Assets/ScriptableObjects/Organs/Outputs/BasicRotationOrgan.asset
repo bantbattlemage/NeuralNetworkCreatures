@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: BasicRotationOrgan
   m_EditorClassIdentifier: 
   Organ: 5
+  ConfigurableInt: 0
+  ConfigurableFloat: 10

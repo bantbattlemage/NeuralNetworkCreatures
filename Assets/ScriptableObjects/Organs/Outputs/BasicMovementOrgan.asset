@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: BasicMovementOrgan
   m_EditorClassIdentifier: 
   Organ: 4
+  ConfigurableInt: 0
+  ConfigurableFloat: 1
