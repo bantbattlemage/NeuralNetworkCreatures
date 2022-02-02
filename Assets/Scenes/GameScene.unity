@@ -355,6 +355,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1891902390}
     - target: {fileID: 6358456644245974485, guid: 324c61a8257be794cbb222009c954aeb, type: 3}
+      propertyPath: Population
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6358456644245974485, guid: 324c61a8257be794cbb222009c954aeb, type: 3}
       propertyPath: TimeScaler
       value: 
       objectReference: {fileID: 985158935}

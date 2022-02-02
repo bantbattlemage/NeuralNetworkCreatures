@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 
+/// <summary>
+/// An InputOrgan contains Sensors that recieve input of some kind from the environment and pass that data into the organ's creature's NeuralNetwork.
+/// </summary>
 public class NeuralNetworkCreatureInputOrgan : NeuralNetworkCreatureOrgan, INeuralNetworkCreatureInputOrgan
 {
 	protected Dictionary<string, NeuralNetworkCreatureInputSensor> _sensors = new Dictionary<string, NeuralNetworkCreatureInputSensor>();

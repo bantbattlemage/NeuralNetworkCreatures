@@ -10,60 +10,33 @@ public class NeuralNetwork : IComparable<NeuralNetwork>
     private float[][] _neurons;
     private float[][] _biases;
     private float[][][] _weights;
-    private int[] _activations;
 
     public NeuralNetwork(int[] layers)
     {
         Layers = new int[layers.Length];
+
         for (int i = 0; i < layers.Length; i++)
         {
             Layers[i] = layers[i];
         }
-        InitNeurons();
-        InitBiases();
-        InitWeights();
-    }
 
-    public float SumWeightAndBiases()
-	{
-        float sum = 0;
-
-        for(int i = 0; i < _biases.Length; i++)
-		{
-            for (int j = 0; j < _biases[i].Length; j++)
-            {
-                sum += _biases[i][j];
-            }
-        }
-
-        for (int i = 0; i < _weights.Length; i++)
-        {
-            for (int j = 0; j < _weights[i].Length; j++)
-            {
-                for (int k = 0; k < _weights[j].Length; k++)
-                {
-                    sum += _weights[i][j][k];
-                }
-            }
-        }
-
-        return sum;
-	}
-
-    private void InitNeurons()
-    {
+        //  Initialize the neurons
         List<float[]> neuronsList = new List<float[]>();
-
         for (int i = 0; i < Layers.Length; i++)
         {
             neuronsList.Add(new float[Layers[i]]);
         }
-
         _neurons = neuronsList.ToArray();
+
+        InitializeWeightsAndBiases();
     }
 
-    private void InitBiases()
+    /// <summary>
+    /// Initialize the network weights & biases with random values between -0.5 and 0.5, with a 50% chance of being set to 0.
+    /// </summary>
+    private void InitializeWeightsAndBiases()
     {
+        //  initialize biases
         List<float[]> biasList = new List<float[]>();
 
         for (int i = 0; i < Layers.Length; i++)
@@ -85,10 +58,8 @@ public class NeuralNetwork : IComparable<NeuralNetwork>
         }
 
         _biases = biasList.ToArray();
-    }
 
-    private void InitWeights()
-    {
+        //  initialzie weights
         List<float[][]> weightsList = new List<float[][]>();
 
         for (int i = 1; i < Layers.Length; i++)
@@ -101,13 +72,12 @@ public class NeuralNetwork : IComparable<NeuralNetwork>
                 float[] neuronWeights = new float[neuronsInPreviousLayer];
                 for (int k = 0; k < neuronsInPreviousLayer; k++)
                 {
-                    //float sd = 1f / ((neurons[i].Length + neuronsInPreviousLayer) / 2f);
-                    if(UnityEngine.Random.Range(0, 100) < 50)
-					{
+                    if (UnityEngine.Random.Range(0, 100) < 50)
+                    {
                         neuronWeights[k] = UnityEngine.Random.Range(-0.5f, 0.5f);
                     }
                     else
-					{
+                    {
                         neuronWeights[k] = 0;
                     }
                 }
@@ -121,7 +91,10 @@ public class NeuralNetwork : IComparable<NeuralNetwork>
         _weights = weightsList.ToArray();
     }
 
-    public float[] FeedForward(float[] inputs)//feed forward, inputs >==> outputs.
+    /// <summary>
+    /// Activate the NeuralNetwork, running through the input neurons with the given inputs and feeding forward throughout the whole network to activate the output neurons.
+    /// </summary>
+    public float[] FeedForward(float[] inputs)
     {
         for (int i = 0; i < inputs.Length; i++)
         {
@@ -146,6 +119,9 @@ public class NeuralNetwork : IComparable<NeuralNetwork>
         return _neurons[_neurons.Length - 1];
     }
 
+    /// <summary>
+    /// Activate the neuron with the given value, returning the hyperbolic tanget of the value to give a float between -1 and 1
+    /// </summary>
     public float Activate(float value)
     {
         return (float)Math.Tanh(value);
@@ -171,18 +147,6 @@ public class NeuralNetwork : IComparable<NeuralNetwork>
                 }
             }
         }
-    }
-
-    public int CompareTo(NeuralNetwork other) //Comparing For NeuralNetworks performance.
-    {
-        if (other == null) return 1;
-
-        if (Fitness > other.Fitness)
-            return 1;
-        else if (Fitness < other.Fitness)
-            return -1;
-        else
-            return 0;
     }
 
     /// <summary>
@@ -213,6 +177,9 @@ public class NeuralNetwork : IComparable<NeuralNetwork>
         return childNetwork;
     }
 
+    /// <summary>
+    /// Returns a deep copy of the NeuralNetwork.
+    /// </summary>
     public NeuralNetwork CreateDeepCopy()
     {
         NeuralNetwork deepCopy = new NeuralNetwork(Layers);
@@ -298,5 +265,43 @@ public class NeuralNetwork : IComparable<NeuralNetwork>
             }
         }
         writer.Close();
+    }
+
+    public float SumWeightAndBiases()
+    {
+        float sum = 0;
+
+        for (int i = 0; i < _biases.Length; i++)
+        {
+            for (int j = 0; j < _biases[i].Length; j++)
+            {
+                sum += _biases[i][j];
+            }
+        }
+
+        for (int i = 0; i < _weights.Length; i++)
+        {
+            for (int j = 0; j < _weights[i].Length; j++)
+            {
+                for (int k = 0; k < _weights[i][j].Length; k++)
+                {
+                    sum += _weights[i][j][k];
+                }
+            }
+        }
+
+        return sum;
+    }
+
+    public int CompareTo(NeuralNetwork other)
+    {
+        if (other == null) return 1;
+
+        if (Fitness > other.Fitness)
+            return 1;
+        else if (Fitness < other.Fitness)
+            return -1;
+        else
+            return 0;
     }
 }

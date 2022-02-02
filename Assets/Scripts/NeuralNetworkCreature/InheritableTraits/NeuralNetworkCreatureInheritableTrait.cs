@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NeuralNetworkCreatureInheritableTrait : NeuralNetworkCreatureOrgan
+public class NeuralNetworkCreatureInheritableTrait : NeuralNetworkCreatureOrgan, INeuralNeworkCreatureInheritableTrait
 {
 	public NeuralNetworkCreatureInheritableTrait(NeuralNetworkCreature creature) : base(creature)
 	{

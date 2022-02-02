@@ -1,12 +1,12 @@
 using UnityEngine;
 
+/// <summary>
+/// The BasicVisionOrgan gives the NeuralNetwork an input value of the distance to any Pellets hit by [sensorCount] rays radiating from the sphere
+/// </summary>
 public class BasicVisionInputOrgan : NeuralNetworkCreatureInputOrgan
 {
 	private float _visionDistance;
 
-	/// <summary>
-	/// The BasicVisionOrgan gives the NeuralNetwork an input value of the distance to any Pellets hit by [sensorCount] rays radiating from the sphere
-	/// </summary>
 	public BasicVisionInputOrgan(NeuralNetworkCreature creature, int sensorCount, float visionDistance) : base(creature)
 	{
 		_creature = creature;
@@ -17,7 +17,7 @@ public class BasicVisionInputOrgan : NeuralNetworkCreatureInputOrgan
 		for(int i = 0; i < sensorCount; i++)
 		{
 			string name = i.ToString();
-			rayResults[i] = new NeuralNetworkCreatureInputSensor().Initialize(name, -1);
+			rayResults[i] = new NeuralNetworkCreatureInputSensor().Initialize(name, 0);
 		}
 
 		Initialize("BasicVision", rayResults);
@@ -38,10 +38,10 @@ public class BasicVisionInputOrgan : NeuralNetworkCreatureInputOrgan
 				{
 					_sensors[i.ToString()].SetValue(hit.distance);
 				}
-				else if(hit.transform.CompareTag("NetworkObject") && hit.transform != _creature.transform)
-				{
-					_sensors[i.ToString()].SetValue(-hit.distance);
-				}
+				//else if(hit.transform.CompareTag("NetworkObject") && hit.transform != _creature.transform)
+				//{
+				//	_sensors[i.ToString()].SetValue(-hit.distance);
+				//}
 				else
 				{
 					_sensors[i.ToString()].SetValue(0);

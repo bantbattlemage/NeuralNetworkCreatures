@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 
+/// <summary>
+/// An OutputOrgan recieves input data from the organ's creature's NeuralNetwork and uses that data to perform some function or action.
+/// </summary>
 public class NeuralNetworkCreatureOutputOrgan : NeuralNetworkCreatureOrgan, INeuralNetworkCreatureOutputOrgan
 {
 	public NeuralNetworkCreatureOutputEmitter Emitter { get; private set; }

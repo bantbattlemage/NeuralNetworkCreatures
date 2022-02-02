@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The SpatialAwareness organ gives the NeuralNetwork the creature's spatial coordinates and Y axis rotation.
+/// </summary>
 public class SpatialAwarenessInputOrgan : NeuralNetworkCreatureInputOrgan
 {
 	public SpatialAwarenessInputOrgan(NeuralNetworkCreature creature) : base(creature)

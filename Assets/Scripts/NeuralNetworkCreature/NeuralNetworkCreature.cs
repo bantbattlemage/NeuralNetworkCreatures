@@ -136,17 +136,9 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		_initialized = true;
 	}
 
-	public void ApplyTraits()
-	{
-		foreach(NeuralNetworkCreatureTraitScriptableObject t in InheritableTraits)
-		{
-			NeuralNetworkCreatureInheritableTrait trait = t.Instantiate(this);
-			trait.Mutate();
-			trait.ApplyTraitValue();
-			_traits.Add(trait.GetName(), trait);
-		}
-	}
-
+	/// <summary>
+	/// Initialize this creature's InheritableTraits using copies of the given parent traits, mutates them, and then applies the traits.
+	/// </summary>
 	public void InitializeTraits(List<NeuralNetworkCreatureInheritableTrait> inheritedTraits)
 	{
 		foreach (NeuralNetworkCreatureInheritableTrait trait in inheritedTraits)
@@ -158,6 +150,23 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		}
 	}
 
+	/// <summary>
+	/// Apply all trait values.
+	/// </summary>
+	public void ApplyTraits()
+	{
+		foreach (NeuralNetworkCreatureTraitScriptableObject t in InheritableTraits)
+		{
+			NeuralNetworkCreatureInheritableTrait trait = t.Instantiate(this);
+			trait.Mutate();
+			trait.ApplyTraitValue();
+			_traits.Add(trait.GetName(), trait);
+		}
+	}
+
+	/// <summary>
+	/// Returns a list of InheritableTraits.
+	/// </summary>
 	public List<NeuralNetworkCreatureInheritableTrait> GetTraits()
 	{
 		return _traits.Values.ToList();
@@ -197,6 +206,9 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		}
 	}
 
+	/// <summary>
+	/// mutationChance/100 chance per value to mutate NeuralNetwork and Organ values.
+	/// </summary>
 	public void Mutate(int mutationChance, float mutationStrength)
 	{
 		Network.Mutate(mutationChance, mutationStrength);
@@ -207,6 +219,9 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		}
 	}
 
+	/// <summary>
+	/// Returns a new NeuralNetworkCreature object with traits mixed from the given otherParent and this creature, and instantiates a GameObject for it at the given location.
+	/// </summary>
 	public NeuralNetworkCreature Reproduce(NeuralNetworkCreature otherParent, Vector3 location)
 	{
 		NeuralNetworkCreature newCreature = Instantiate(gameObject, location, new Quaternion()).GetComponent<NeuralNetworkCreature>();
@@ -227,6 +242,9 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		}
 	}
 
+	/// <summary>
+	/// OnDestroy
+	/// </summary>
 	private void OnDestroy()
 	{
 		Destroy(GetComponent<MeshRenderer>().material);

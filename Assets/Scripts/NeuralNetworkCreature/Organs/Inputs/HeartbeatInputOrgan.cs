@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The HeartbeatInputOrgan gives the NeuralNetwork two input values; a ticking lifetime and the sin wave of that lifetime.
+/// </summary>
 public class HeartbeatInputOrgan : NeuralNetworkCreatureInputOrgan
 {
 	private float _lifetime = 0;
 
-	/// <summary>
-	/// The HeartbeatInputOrgan gives the NeuralNetral two input values; a ticking lifetime and the sin wave of that lifetime.
-	/// </summary>
 	public HeartbeatInputOrgan(NeuralNetworkCreature creature) : base(creature)
 	{
 		NeuralNetworkCreatureInputSensor[] heartbeat = new NeuralNetworkCreatureInputSensor[2];
