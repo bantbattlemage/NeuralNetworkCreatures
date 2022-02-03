@@ -7,9 +7,10 @@ using UnityEngine;
 /// </summary>
 public class SpatialAwarenessInputOrgan : NeuralNetworkCreatureInputOrgan
 {
-	public SpatialAwarenessInputOrgan(NeuralNetworkCreature creature) : base(creature)
+	public SpatialAwarenessInputOrgan(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type) : base(creature, type)
 	{
 		_creature = creature;
+		Type = type;
 
 		NeuralNetworkCreatureInputSensor[] directionalSensors = new NeuralNetworkCreatureInputSensor[4];
 

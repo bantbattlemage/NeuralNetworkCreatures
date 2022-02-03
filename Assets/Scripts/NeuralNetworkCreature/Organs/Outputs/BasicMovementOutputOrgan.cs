@@ -2,10 +2,11 @@ using UnityEngine;
 
 public class BasicMovementOutputOrgan : NeuralNetworkCreatureOutputOrgan
 {
-	public BasicMovementOutputOrgan(float speed, NeuralNetworkCreature creature) : base(creature)
+	public BasicMovementOutputOrgan(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, float speed) : base(creature, type)
 	{
 		_value = speed;
 		_creature = creature;
+		Type = type;
 		Initialize("BasicMovement");
 	}
 

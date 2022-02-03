@@ -7,9 +7,10 @@ public class BasicVisionInputOrgan : NeuralNetworkCreatureInputOrgan
 {
 	private float _visionDistance;
 
-	public BasicVisionInputOrgan(NeuralNetworkCreature creature, int sensorCount, float visionDistance) : base(creature)
+	public BasicVisionInputOrgan(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, int sensorCount, float visionDistance) : base(creature, type)
 	{
 		_creature = creature;
+		Type = type;
 		_visionDistance = visionDistance;
 
 		NeuralNetworkCreatureInputSensor[] rayResults = new NeuralNetworkCreatureInputSensor[sensorCount];
@@ -52,5 +53,10 @@ public class BasicVisionInputOrgan : NeuralNetworkCreatureInputOrgan
 				_sensors[i.ToString()].SetValue(0);
 			}
 		}
+	}
+
+	public override NeuralNetworkCreatureOrgan CreateDeepCopy()
+	{
+		return base.CreateDeepCopy();
 	}
 }

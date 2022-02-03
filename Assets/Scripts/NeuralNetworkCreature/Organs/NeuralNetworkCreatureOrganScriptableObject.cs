@@ -12,27 +12,35 @@ public class NeuralNetworkCreatureOrganScriptableObject : ScriptableObject
 		switch (Organ)
 		{
 			case NeuralNetworkCreatureOrganType.Heartbeat:
-				return new HeartbeatInputOrgan(creature);
+				return new HeartbeatInputOrgan(creature, Organ);
 			case NeuralNetworkCreatureOrganType.SpatialAwareness:
-				return new SpatialAwarenessInputOrgan(creature);
+				return new SpatialAwarenessInputOrgan(creature, Organ);
 			case NeuralNetworkCreatureOrganType.BasicMovement:
-				return new BasicMovementOutputOrgan(ConfigurableFloat, creature);
+				return new BasicMovementOutputOrgan(creature, Organ, ConfigurableFloat);
 			case NeuralNetworkCreatureOrganType.BasicRotation:
-				return new BasicRotationOutputOrgan(ConfigurableFloat, creature);
+				return new BasicRotationOutputOrgan(creature, Organ, ConfigurableFloat);
 			case NeuralNetworkCreatureOrganType.BasicVision:
-				return new BasicVisionInputOrgan(creature, ConfigurableInt, ConfigurableFloat);
+				return new BasicVisionInputOrgan(creature, Organ, ConfigurableInt, ConfigurableFloat);
 			case NeuralNetworkCreatureOrganType.BasicPelletConsumption:
-				return new BasicPelletConsumptionInputOrgan(creature);
-			case NeuralNetworkCreatureOrganType.GenericInput:
-				NeuralNetworkCreatureInputOrgan io = new NeuralNetworkCreatureInputOrgan(creature);
-				io.SetName(Random.Range(0f, 10000f).ToString());
-				return io;
-			case NeuralNetworkCreatureOrganType.GenericOutput:
-				NeuralNetworkCreatureOutputOrgan oo = new NeuralNetworkCreatureOutputOrgan(creature);
-				oo.SetName(Random.Range(0f, 10000f).ToString());
-				return oo;
+				return new BasicPelletConsumptionInputOrgan(creature, Organ);
 			default:
-				return new NeuralNetworkCreatureOrgan(creature);
+				throw new System.Exception("No Organ type defined");
+		}
+	}
+
+	public NeuralNetworkCreatureInheritableTrait Instantiate(NeuralNetworkCreature creature, bool isTrait)
+	{
+		if(isTrait == false)
+		{
+			throw new System.Exception("Call other Instantiate function to get an Organ that is not a Trait");
+		}
+
+		switch (Organ)
+		{
+			case NeuralNetworkCreatureOrganType.ColorTrait:
+				return new ColorTrait(creature, NeuralNetworkCreatureOrganType.ColorTrait, new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
+			default:
+				throw new System.Exception("No Organ type defined");
 		}
 	}
 }

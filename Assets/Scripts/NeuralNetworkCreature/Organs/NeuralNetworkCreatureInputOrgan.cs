@@ -3,11 +3,13 @@ using System.Collections.Generic;
 /// <summary>
 /// An InputOrgan contains Sensors that recieve input of some kind from the environment and pass that data into the organ's creature's NeuralNetwork.
 /// </summary>
-public class NeuralNetworkCreatureInputOrgan : NeuralNetworkCreatureOrgan, INeuralNetworkCreatureInputOrgan
+public class NeuralNetworkCreatureInputOrgan : NeuralNetworkCreatureOrgan
 {
 	protected Dictionary<string, NeuralNetworkCreatureInputSensor> _sensors = new Dictionary<string, NeuralNetworkCreatureInputSensor>();
 
-	public NeuralNetworkCreatureInputOrgan(NeuralNetworkCreature creature) : base(creature)
+	public int SensorCount { get { return _sensors.Count; } }
+
+	public NeuralNetworkCreatureInputOrgan(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type) : base(creature, type)
 	{
 		_creature = creature;
 	}
@@ -31,8 +33,6 @@ public class NeuralNetworkCreatureInputOrgan : NeuralNetworkCreatureOrgan, INeur
 	{
 
 	}
-
-	public int SensorCount { get { return _sensors.Count; } }
 
 	/// <summary>
 	/// Returns the output values of all of the sensors.

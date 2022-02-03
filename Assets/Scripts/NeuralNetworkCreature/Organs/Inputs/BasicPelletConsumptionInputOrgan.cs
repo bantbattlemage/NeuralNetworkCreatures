@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class BasicPelletConsumptionInputOrgan : NeuralNetworkCreatureInputOrgan
 {
-	public BasicPelletConsumptionInputOrgan(NeuralNetworkCreature creature) : base(creature)
+	public BasicPelletConsumptionInputOrgan(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type) : base(creature, type)
 	{
 		_creature = creature;
+		Type = type;
 		creature.OnCreatureCollision += OnCollision;
 
 		NeuralNetworkCreatureInputSensor sensor = new NeuralNetworkCreatureInputSensor().Initialize("HasEaten", 0);
@@ -26,5 +27,10 @@ public class BasicPelletConsumptionInputOrgan : NeuralNetworkCreatureInputOrgan
 	public override void UpdateSensors()
 	{
 		_sensors["HasEaten"].SetValue(0);
+	}
+
+	public override NeuralNetworkCreatureOrgan CreateDeepCopy()
+	{
+		return base.CreateDeepCopy();
 	}
 }

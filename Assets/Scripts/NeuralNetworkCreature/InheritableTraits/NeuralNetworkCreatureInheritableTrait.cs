@@ -2,19 +2,19 @@ using UnityEngine;
 
 public class NeuralNetworkCreatureInheritableTrait : NeuralNetworkCreatureOrgan, INeuralNeworkCreatureInheritableTrait
 {
-	public NeuralNetworkCreatureInheritableTrait(NeuralNetworkCreature creature) : base(creature)
+	public NeuralNetworkCreatureInheritableTrait(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type) : base(creature, type)
 	{
-		_creature = creature;
+
 	}
 
 	public virtual NeuralNetworkCreatureInheritableTrait CreateDeepCopy(NeuralNetworkCreature creature)
 	{
-		NeuralNetworkCreatureInheritableTrait newTrait = new NeuralNetworkCreatureInheritableTrait(creature);
+		NeuralNetworkCreatureInheritableTrait newTrait = new NeuralNetworkCreatureInheritableTrait(creature, Type);
 		return newTrait;
 	}
 
 	public virtual void ApplyTraitValue()
 	{
-
+		throw new System.NotImplementedException();
 	}
 }

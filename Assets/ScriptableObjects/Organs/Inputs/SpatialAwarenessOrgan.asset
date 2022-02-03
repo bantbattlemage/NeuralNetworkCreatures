@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: SpatialAwarenessOrgan
   m_EditorClassIdentifier: 
   Organ: 3
+  ConfigurableInt: 0
+  ConfigurableFloat: 0

@@ -8,7 +8,7 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	[Header("Prefab Settings")]
 	public List<NeuralNetworkCreatureOrganScriptableObject> InputOrgans;
 	public List<NeuralNetworkCreatureOrganScriptableObject> OutputOrgans;
-	public List<NeuralNetworkCreatureTraitScriptableObject> InheritableTraits;
+	public List<NeuralNetworkCreatureOrganScriptableObject> InheritableTraits;
 
 	//	Internal variables
 	protected bool _initialized = false;
@@ -46,6 +46,36 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		}
 
 		Initialize(inputOrgans, outputOrgans);
+	}
+
+	/// <summary>
+	/// Initialize the creature creating exact copies of the given network, organs, and traits
+	/// </summary>
+	/// <param name="network"></param>
+	/// <param name="inputOrgans"></param>
+	/// <param name="outputOrgans"></param>
+	/// <param name="traits"></param>
+	public void Initialize(NeuralNetwork network, List<NeuralNetworkCreatureInputOrgan> inputOrgans, List<NeuralNetworkCreatureOutputOrgan> outputOrgans, List<NeuralNetworkCreatureInheritableTrait> traits)
+	{
+		Network = network.CreateDeepCopy();
+		_internalLayers = network.Layers.Length - 2;
+		_internalLayerSize = network.Layers.Length - 2 > 0 ? network.Layers[1] : 0;
+
+		InitializeTraits(traits, false);
+
+		_inputOrgans = new Dictionary<string, NeuralNetworkCreatureInputOrgan>();
+		foreach (NeuralNetworkCreatureInputOrgan o in inputOrgans)
+		{
+			NeuralNetworkCreatureInputOrgan copy = o.CreateDeepCopy() as NeuralNetworkCreatureInputOrgan;
+			_inputOrgans.Add(copy.GetName(), copy);
+		}
+
+		_outputOrgans = new Dictionary<string, NeuralNetworkCreatureOutputOrgan>();
+		foreach (NeuralNetworkCreatureOutputOrgan o in outputOrgans)
+		{
+			NeuralNetworkCreatureOutputOrgan copy = o.CreateDeepCopy() as NeuralNetworkCreatureOutputOrgan;
+			_outputOrgans.Add(copy.GetName(), copy);
+		}
 	}
 
 	/// <summary>
@@ -137,15 +167,32 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	}
 
 	/// <summary>
+	/// Returns a deep copy of the creature.
+	/// </summary>
+	public NeuralNetworkCreature CreateDeepyCopy()
+	{
+		NeuralNetworkCreature deepCopy = new NeuralNetworkCreature();
+
+		deepCopy.Initialize(Network.CreateDeepCopy(), _inputOrgans.Values.ToList(), _outputOrgans.Values.ToList(), GetTraits());
+		return deepCopy;
+	}
+
+	/// <summary>
 	/// Initialize this creature's InheritableTraits using copies of the given parent traits, mutates them, and then applies the traits.
 	/// </summary>
-	public void InitializeTraits(List<NeuralNetworkCreatureInheritableTrait> inheritedTraits)
+	public void InitializeTraits(List<NeuralNetworkCreatureInheritableTrait> inheritedTraits, bool mutate = true)
 	{
 		foreach (NeuralNetworkCreatureInheritableTrait trait in inheritedTraits)
 		{
 			NeuralNetworkCreatureInheritableTrait newTrait = trait.CreateDeepCopy(this);
-			newTrait.Mutate();
+
+			if(mutate)
+			{
+				newTrait.Mutate();
+			}
+
 			newTrait.ApplyTraitValue();
+
 			_traits.Add(newTrait.GetName(), newTrait);
 		}
 	}
@@ -155,9 +202,9 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	/// </summary>
 	public void ApplyTraits()
 	{
-		foreach (NeuralNetworkCreatureTraitScriptableObject t in InheritableTraits)
+		foreach (NeuralNetworkCreatureOrganScriptableObject t in InheritableTraits)
 		{
-			NeuralNetworkCreatureInheritableTrait trait = t.Instantiate(this);
+			NeuralNetworkCreatureInheritableTrait trait = t.Instantiate(this, true);
 			trait.Mutate();
 			trait.ApplyTraitValue();
 			_traits.Add(trait.GetName(), trait);

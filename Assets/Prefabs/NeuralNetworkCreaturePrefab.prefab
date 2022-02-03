@@ -48,8 +48,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a614c7587857cc44595b3d07505fbc17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementSpeed: 1
-  RotationSpeed: 8
   InputOrgans:
   - {fileID: 11400000, guid: 10da04bde45967343b991f6dcb9f6497, type: 2}
   - {fileID: 11400000, guid: 6e25ae30713383a48b135f79808930d1, type: 2}
@@ -59,7 +57,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 929d7cd97d74f004490e6c78a63cd20b, type: 2}
   - {fileID: 11400000, guid: bf763f277e3f7f34aa1f0b1e9ba02309, type: 2}
   InheritableTraits:
-  - {fileID: 11400000, guid: 94f1478fb5aa1a74d8049d5a2cb74f6b, type: 2}
+  - {fileID: 11400000, guid: d8424bd80e3e3b7468c5e637feb81085, type: 2}
 --- !u!33 &393616942934541753
 MeshFilter:
   m_ObjectHideFlags: 0

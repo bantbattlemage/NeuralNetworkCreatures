@@ -157,7 +157,7 @@ public class GameController : MonoBehaviour
 
 			NeuralNetworkCreature newCreature = Instantiate(NeuralNetworkCreaturePrefab, randomCoords, new Quaternion()).GetComponent<NeuralNetworkCreature>();
 			newCreature.Initialize();
-			newCreature.Network.Fitness += Random.Range(1, 100);
+			newCreature.Network.Fitness = 0;
 
 			_creatures.Add(newCreature);
 		}

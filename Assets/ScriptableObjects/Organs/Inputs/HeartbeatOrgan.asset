@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: HeartbeatOrgan
   m_EditorClassIdentifier: 
   Organ: 2
+  ConfigurableInt: 0
+  ConfigurableFloat: 0

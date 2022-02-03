@@ -1,7 +1,7 @@
 public enum NeuralNetworkCreatureOrganType
 {
-	GenericInput,
-	GenericOutput,
+	Null = 0,
+	ColorTrait,
 	Heartbeat,
 	SpatialAwareness,
 	BasicMovement,

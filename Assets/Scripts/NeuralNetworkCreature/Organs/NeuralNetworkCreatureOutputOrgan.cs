@@ -3,11 +3,11 @@ using System.Collections.Generic;
 /// <summary>
 /// An OutputOrgan recieves input data from the organ's creature's NeuralNetwork and uses that data to perform some function or action.
 /// </summary>
-public class NeuralNetworkCreatureOutputOrgan : NeuralNetworkCreatureOrgan, INeuralNetworkCreatureOutputOrgan
+public class NeuralNetworkCreatureOutputOrgan : NeuralNetworkCreatureOrgan
 {
 	public NeuralNetworkCreatureOutputEmitter Emitter { get; private set; }
 
-	public NeuralNetworkCreatureOutputOrgan(NeuralNetworkCreature creature) : base(creature)
+	public NeuralNetworkCreatureOutputOrgan(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type) : base(creature, type)
 	{
 
 	}
@@ -55,5 +55,13 @@ public class NeuralNetworkCreatureOutputOrgan : NeuralNetworkCreatureOrgan, INeu
 	public float SetOutputValue(float value)
 	{
 		return SetOutputValue(value, false);
+	}
+
+	public override NeuralNetworkCreatureOrgan CreateDeepCopy()
+	{
+		NeuralNetworkCreatureOutputOrgan copy = new NeuralNetworkCreatureOutputOrgan(_creature, Type);
+		copy.SetValue(_value);
+		copy.SetName(_name);
+		return copy;
 	}
 }

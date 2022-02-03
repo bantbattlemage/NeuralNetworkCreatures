@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: BasicPelletConsumptionOrgan
   m_EditorClassIdentifier: 
   Organ: 7
+  ConfigurableInt: 0
+  ConfigurableFloat: 0

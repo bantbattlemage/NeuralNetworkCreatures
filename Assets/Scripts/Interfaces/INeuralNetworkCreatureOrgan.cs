@@ -2,4 +2,5 @@
 {
 	public string GetName();
 	public void Mutate();
+	public NeuralNetworkCreatureOrgan CreateDeepCopy();
 }

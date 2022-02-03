@@ -9,8 +9,11 @@ public class HeartbeatInputOrgan : NeuralNetworkCreatureInputOrgan
 {
 	private float _lifetime = 0;
 
-	public HeartbeatInputOrgan(NeuralNetworkCreature creature) : base(creature)
+	public HeartbeatInputOrgan(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type) : base(creature, type)
 	{
+		_creature = creature;
+		Type = type;
+
 		NeuralNetworkCreatureInputSensor[] heartbeat = new NeuralNetworkCreatureInputSensor[2];
 
 		heartbeat[0] = new NeuralNetworkCreatureInputSensor().Initialize("Lifetime", _lifetime);

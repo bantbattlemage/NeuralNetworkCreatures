@@ -5,16 +5,18 @@ public class ColorTrait : NeuralNetworkCreatureInheritableTrait
 {
 	private Color _colorValue;
 
-	public ColorTrait(NeuralNetworkCreature creature, Color c) : base (creature)
+	public ColorTrait(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, Color c) : base (creature, type)
 	{
 		_creature = creature;
 		_colorValue = c;
+		Type = type;
+
 		SetName("Color");
 	}
 
 	public override NeuralNetworkCreatureInheritableTrait CreateDeepCopy(NeuralNetworkCreature creature)
 	{
-		return new ColorTrait(creature, _colorValue);
+		return new ColorTrait(creature, Type, _colorValue);
 	}
 
 	public override void ApplyTraitValue()

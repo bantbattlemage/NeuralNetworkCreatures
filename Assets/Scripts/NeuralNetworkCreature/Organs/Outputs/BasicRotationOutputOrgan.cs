@@ -2,10 +2,11 @@ using UnityEngine;
 
 public class BasicRotationOutputOrgan : NeuralNetworkCreatureOutputOrgan
 {
-	public BasicRotationOutputOrgan(float speed, NeuralNetworkCreature creature) : base(creature)
+	public BasicRotationOutputOrgan(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, float speed) : base(creature, type)
 	{
 		_value = speed;
 		_creature = creature;
+		Type = type;
 		Initialize("BasicRotation");
 	}
 
