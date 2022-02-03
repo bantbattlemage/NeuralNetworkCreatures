@@ -5,20 +5,8 @@ public class NeuralNetworkCreatureOutputEmitter : NeuralNetworkCreatureVariable
 
 	public void Initialize(string name, float value = 0)
 	{
-		_name = name;
-		_value = value;
-	}
-
-	public override float SetValue(float value, bool emitValue = true)
-	{
-		_value = value;
-
-		if(emitValue && EmitValue != null)
-		{
-			EmitValue();
-		}
-
-		return _value;
+		Name = name;
+		VariableValue = value;
 	}
 
 	public void RegisterOnValueEmissionEvent(EmitValueEvent e)

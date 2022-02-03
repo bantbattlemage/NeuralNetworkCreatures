@@ -148,6 +148,8 @@ public class GameController : MonoBehaviour
 
 	public void InitializeWorld()
 	{
+		WorldFloor.transform.localScale = new Vector3(WorldSize.x / 10f, 1, WorldSize.y / 10f);
+
 		_creatures = new List<NeuralNetworkCreature>();
 		_currentGeneration = 0;
 
@@ -163,8 +165,6 @@ public class GameController : MonoBehaviour
 		}
 
 		SpawnPellets();
-
-		WorldFloor.transform.localScale = new Vector3(WorldSize.x / 10f, 1, WorldSize.y / 10f);
 	}
 
 	public bool IsOutOfBounds(Vector3 vector)

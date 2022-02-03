@@ -14,18 +14,18 @@ public class HeartbeatInputOrgan : NeuralNetworkCreatureInputOrgan
 		_creature = creature;
 		Type = type;
 
-		NeuralNetworkCreatureInputSensor[] heartbeat = new NeuralNetworkCreatureInputSensor[2];
+		NeuralNetworkCreatureVariable[] heartbeat = new NeuralNetworkCreatureVariable[2];
 
-		heartbeat[0] = new NeuralNetworkCreatureInputSensor().Initialize("Lifetime", _lifetime);
-		heartbeat[1] = new NeuralNetworkCreatureInputSensor().Initialize("Rhythm", Mathf.Sin(_lifetime));
+		heartbeat[0] = new NeuralNetworkCreatureVariable("Lifetime", _lifetime);
+		heartbeat[1] = new NeuralNetworkCreatureVariable("Rhythm", Mathf.Sin(_lifetime));
 
 		Initialize("Heartbeat", heartbeat);
 	}
 
 	public override void UpdateSensors()
 	{
-		_sensors["Lifetime"].SetValue(_lifetime);
-		_sensors["Rhythm"].SetValue(Mathf.Sin(_lifetime));
+		_sensors["Lifetime"].VariableValue = _lifetime;
+		_sensors["Rhythm"].VariableValue = Mathf.Sin(_lifetime);
 		_lifetime++;
 	}
 }

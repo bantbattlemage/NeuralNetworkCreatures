@@ -13,12 +13,12 @@ public class BasicVisionInputOrgan : NeuralNetworkCreatureInputOrgan
 		Type = type;
 		_visionDistance = visionDistance;
 
-		NeuralNetworkCreatureInputSensor[] rayResults = new NeuralNetworkCreatureInputSensor[sensorCount];
+		NeuralNetworkCreatureVariable[] rayResults = new NeuralNetworkCreatureVariable[sensorCount];
 
 		for(int i = 0; i < sensorCount; i++)
 		{
 			string name = i.ToString();
-			rayResults[i] = new NeuralNetworkCreatureInputSensor().Initialize(name, 0);
+			rayResults[i] = new NeuralNetworkCreatureVariable(name, 0);
 		}
 
 		Initialize("BasicVision", rayResults);
@@ -37,7 +37,7 @@ public class BasicVisionInputOrgan : NeuralNetworkCreatureInputOrgan
 			{
 				if(hit.transform.CompareTag("Pellet"))
 				{
-					_sensors[i.ToString()].SetValue(hit.distance);
+					_sensors[i.ToString()].VariableValue = hit.distance;
 				}
 				//else if(hit.transform.CompareTag("NetworkObject") && hit.transform != _creature.transform)
 				//{
@@ -45,12 +45,12 @@ public class BasicVisionInputOrgan : NeuralNetworkCreatureInputOrgan
 				//}
 				else
 				{
-					_sensors[i.ToString()].SetValue(0);
+					_sensors[i.ToString()].VariableValue = 0;
 				}
 			}
 			else
 			{
-				_sensors[i.ToString()].SetValue(0);
+				_sensors[i.ToString()].VariableValue = 0;
 			}
 		}
 	}

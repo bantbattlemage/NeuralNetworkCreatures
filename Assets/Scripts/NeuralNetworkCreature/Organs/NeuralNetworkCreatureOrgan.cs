@@ -15,11 +15,16 @@ public class NeuralNetworkCreatureOrgan : NeuralNetworkCreatureVariable, INeural
 		Type = type;
 	}
 
+	public void Initialize()
+	{
+
+	}
+
 	public virtual void Mutate()
 	{
 		float m = GameController.Instance.RollMutationFactor();
-		_value += m;
-		_value = Mathf.Clamp(_value, _minVariableValue, _maxVariableValue);
+		VariableValue += m;
+		VariableValue = Mathf.Clamp(VariableValue, _minVariableValue, _maxVariableValue);
 	}
 
 	public virtual NeuralNetworkCreatureOrgan CreateDeepCopy()

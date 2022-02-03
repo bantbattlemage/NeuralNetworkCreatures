@@ -1,32 +1,17 @@
 public class NeuralNetworkCreatureVariable : INeuralNetworkCreatureVariable
 {
-	protected string _name;
-	protected float _value;
+	public virtual string Name { get; protected set; }
 
-	public virtual float GetValue()
+	public virtual float VariableValue { get; set; }
+
+	public NeuralNetworkCreatureVariable(string name = null, float value = 0)
 	{
-		return _value;
+		Name = name;
+		VariableValue = value;
 	}
 
-	public virtual float SetValue(float value)
+	public NeuralNetworkCreatureVariable CopyCreatureVariable()
 	{
-		_value = value;
-		return _value;
-	}
-
-	public virtual float SetValue(float value, bool emitValue = true)
-	{
-		_value = value;
-		return _value;
-	}
-
-	public string GetName()
-	{
-		return _name;
-	}
-
-	public void SetName(string name)
-	{
-		_name = name;
+		return new NeuralNetworkCreatureVariable(Name, VariableValue);
 	}
 }

@@ -10,8 +10,7 @@ public class ColorTrait : NeuralNetworkCreatureInheritableTrait
 		_creature = creature;
 		_colorValue = c;
 		Type = type;
-
-		SetName("Color");
+		Name = "Color";
 	}
 
 	public override NeuralNetworkCreatureInheritableTrait CreateDeepCopy(NeuralNetworkCreature creature)

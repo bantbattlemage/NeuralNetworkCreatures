@@ -67,14 +67,14 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		foreach (NeuralNetworkCreatureInputOrgan o in inputOrgans)
 		{
 			NeuralNetworkCreatureInputOrgan copy = o.CreateDeepCopy() as NeuralNetworkCreatureInputOrgan;
-			_inputOrgans.Add(copy.GetName(), copy);
+			_inputOrgans.Add(copy.Name, copy);
 		}
 
 		_outputOrgans = new Dictionary<string, NeuralNetworkCreatureOutputOrgan>();
 		foreach (NeuralNetworkCreatureOutputOrgan o in outputOrgans)
 		{
 			NeuralNetworkCreatureOutputOrgan copy = o.CreateDeepCopy() as NeuralNetworkCreatureOutputOrgan;
-			_outputOrgans.Add(copy.GetName(), copy);
+			_outputOrgans.Add(copy.Name, copy);
 		}
 	}
 
@@ -110,13 +110,13 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		//	Initialize creature input organs
 		for(int i = 0; i < inputOrgans.Count; i++)
 		{
-			_inputOrgans.Add(inputOrgans[i].GetName(), inputOrgans[i]);
+			_inputOrgans.Add(inputOrgans[i].Name, inputOrgans[i]);
 		}
 
 		//	Initialize creature output organs
 		for (int i = 0; i < outputOrgans.Count; i++)
 		{
-			_outputOrgans.Add(outputOrgans[i].GetName(), outputOrgans[i]);
+			_outputOrgans.Add(outputOrgans[i].Name, outputOrgans[i]);
 		}
 
 		_initialized = true;
@@ -152,15 +152,15 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		//	Initialize creature input organs
 		for (int i = 0; i < inputOrgans.Count; i++)
 		{
-			_inputOrgans.Add(inputOrgans[i].GetName(), inputOrgans[i]);
+			_inputOrgans.Add(inputOrgans[i].Name, inputOrgans[i]);
 		}
 
 		//	Initialize creauture output organs
 		for (int i = 0; i < outputOrgans.Count; i++)
 		{
-			outputOrgans[i].SetValue(parent._outputOrgans[outputOrgans[i].GetName()].GetValue());	//	set the internal organ modifier value to the parent's value
+			outputOrgans[i].VariableValue = parent._outputOrgans[outputOrgans[i].Name].VariableValue;	//	set the internal organ modifier value to the parent's value
 			outputOrgans[i].Mutate();
-			_outputOrgans.Add(outputOrgans[i].GetName(), outputOrgans[i]);
+			_outputOrgans.Add(outputOrgans[i].Name, outputOrgans[i]);
 		}
 
 		_initialized = true;
@@ -193,7 +193,7 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 
 			newTrait.ApplyTraitValue();
 
-			_traits.Add(newTrait.GetName(), newTrait);
+			_traits.Add(newTrait.Name, newTrait);
 		}
 	}
 
@@ -207,7 +207,7 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 			NeuralNetworkCreatureInheritableTrait trait = t.Instantiate(this, true);
 			trait.Mutate();
 			trait.ApplyTraitValue();
-			_traits.Add(trait.GetName(), trait);
+			_traits.Add(trait.Name, trait);
 		}
 	}
 

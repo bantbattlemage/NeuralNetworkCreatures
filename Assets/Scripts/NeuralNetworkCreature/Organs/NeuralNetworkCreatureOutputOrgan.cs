@@ -9,7 +9,8 @@ public class NeuralNetworkCreatureOutputOrgan : NeuralNetworkCreatureOrgan
 
 	public NeuralNetworkCreatureOutputOrgan(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type) : base(creature, type)
 	{
-
+		_creature = creature;
+		Type = type;
 	}
 
 	/// <summary>
@@ -17,7 +18,7 @@ public class NeuralNetworkCreatureOutputOrgan : NeuralNetworkCreatureOrgan
 	/// </summary>
 	public NeuralNetworkCreatureOutputOrgan Initialize(string name)
 	{
-		SetName(name);
+		Name = name;
 		Emitter = new NeuralNetworkCreatureOutputEmitter();
 		Emitter.Initialize(name);
 
@@ -37,31 +38,14 @@ public class NeuralNetworkCreatureOutputOrgan : NeuralNetworkCreatureOrgan
 	/// </summary>
 	public float GetOutputValue()
 	{
-		return Emitter.GetValue();
+		return Emitter.VariableValue;
 	}
 
 	/// <summary>
-	/// Set the value of emitter and emit the value if emitValue = true
+	/// Set the value of the emitter.
 	/// </summary>
-	public float SetOutputValue(float value, bool emitValue = false)
+	public void SetOutputValue(float value)
 	{
-		value = Emitter.SetValue(value, emitValue);
-		return value;
-	}
-
-	/// <summary>
-	/// Set the value of the emitter. Does NOT emit the event.
-	/// </summary>
-	public float SetOutputValue(float value)
-	{
-		return SetOutputValue(value, false);
-	}
-
-	public override NeuralNetworkCreatureOrgan CreateDeepCopy()
-	{
-		NeuralNetworkCreatureOutputOrgan copy = new NeuralNetworkCreatureOutputOrgan(_creature, Type);
-		copy.SetValue(_value);
-		copy.SetName(_name);
-		return copy;
+		Emitter.VariableValue = value;
 	}
 }

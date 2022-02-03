@@ -12,33 +12,33 @@ public class SpatialAwarenessInputOrgan : NeuralNetworkCreatureInputOrgan
 		_creature = creature;
 		Type = type;
 
-		NeuralNetworkCreatureInputSensor[] directionalSensors = new NeuralNetworkCreatureInputSensor[4];
+		NeuralNetworkCreatureVariable[] directionalSensors = new NeuralNetworkCreatureVariable[4];
 
-		directionalSensors[0] = new NeuralNetworkCreatureInputSensor().Initialize("X", _creature.transform.position.x);
-		directionalSensors[1] = new NeuralNetworkCreatureInputSensor().Initialize("Y", _creature.transform.position.y);
-		directionalSensors[2] = new NeuralNetworkCreatureInputSensor().Initialize("Z", _creature.transform.position.z);
-		directionalSensors[3] = new NeuralNetworkCreatureInputSensor().Initialize("R", _creature.transform.rotation.y);
+		directionalSensors[0] = new NeuralNetworkCreatureVariable("X", _creature.transform.position.x);
+		directionalSensors[1] = new NeuralNetworkCreatureVariable("Y", _creature.transform.position.y);
+		directionalSensors[2] = new NeuralNetworkCreatureVariable("Z", _creature.transform.position.z);
+		directionalSensors[3] = new NeuralNetworkCreatureVariable("R", _creature.transform.rotation.y);
 
 		Initialize("SpatialAwareness", directionalSensors);
 	}
 
 	public override void UpdateSensors()
 	{
-		foreach (KeyValuePair<string, NeuralNetworkCreatureInputSensor> kvp in _sensors)
+		foreach (KeyValuePair<string, NeuralNetworkCreatureVariable> kvp in _sensors)
 		{
-			switch (kvp.Value.GetName())
+			switch (kvp.Value.Name)
 			{
 				case "X":
-					kvp.Value.SetValue(_creature.transform.position.x);
+					kvp.Value.VariableValue = _creature.transform.position.x;
 					break;
 				case "Y":
-					kvp.Value.SetValue(_creature.transform.position.y);
+					kvp.Value.VariableValue = _creature.transform.position.y;
 					break;
 				case "Z":
-					kvp.Value.SetValue(_creature.transform.position.z);
+					kvp.Value.VariableValue = _creature.transform.position.z;
 					break;
 				case "R":
-					kvp.Value.SetValue(_creature.transform.rotation.y);
+					kvp.Value.VariableValue = _creature.transform.rotation.y;
 					break;
 				default:
 					throw new System.Exception("unknown sensor");

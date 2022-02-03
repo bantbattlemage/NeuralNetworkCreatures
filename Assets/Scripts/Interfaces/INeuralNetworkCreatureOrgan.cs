@@ -1,6 +1,6 @@
 ﻿public interface INeuralNetworkCreatureOrgan
 {
-	public string GetName();
+	public void Initialize();
 	public void Mutate();
 	public NeuralNetworkCreatureOrgan CreateDeepCopy();
 }

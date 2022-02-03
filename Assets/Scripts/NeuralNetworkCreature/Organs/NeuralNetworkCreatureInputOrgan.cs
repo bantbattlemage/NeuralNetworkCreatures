@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// </summary>
 public class NeuralNetworkCreatureInputOrgan : NeuralNetworkCreatureOrgan
 {
-	protected Dictionary<string, NeuralNetworkCreatureInputSensor> _sensors = new Dictionary<string, NeuralNetworkCreatureInputSensor>();
+	protected Dictionary<string, NeuralNetworkCreatureVariable> _sensors = new Dictionary<string, NeuralNetworkCreatureVariable>();
 
 	public int SensorCount { get { return _sensors.Count; } }
 
@@ -14,13 +14,13 @@ public class NeuralNetworkCreatureInputOrgan : NeuralNetworkCreatureOrgan
 		_creature = creature;
 	}
 
-	public NeuralNetworkCreatureInputOrgan Initialize(string name, NeuralNetworkCreatureInputSensor[] sensors)
+	public NeuralNetworkCreatureInputOrgan Initialize(string name, NeuralNetworkCreatureVariable[] sensors)
 	{
-		SetName(name);
+		Name = name;
 
 		for (int i = 0; i < sensors.Length; i++)
 		{
-			_sensors.Add(sensors[i].GetName(), sensors[i]);
+			_sensors.Add(sensors[i].Name, sensors[i]);
 		}
 
 		return this;
@@ -42,9 +42,9 @@ public class NeuralNetworkCreatureInputOrgan : NeuralNetworkCreatureOrgan
 		float[] output = new float[_sensors.Count];
 
 		int i = 0;
-		foreach(KeyValuePair<string, NeuralNetworkCreatureInputSensor> kvp in _sensors)
+		foreach(KeyValuePair<string, NeuralNetworkCreatureVariable> kvp in _sensors)
 		{
-			output[i] = kvp.Value.GetValue();
+			output[i] = kvp.Value.VariableValue;
 			i++;
 		}
 
@@ -58,10 +58,10 @@ public class NeuralNetworkCreatureInputOrgan : NeuralNetworkCreatureOrgan
 	{
 		if(!_sensors.ContainsKey(sensorName))
 		{
-			_sensors.Add(sensorName, new NeuralNetworkCreatureInputSensor());
+			_sensors.Add(sensorName, new NeuralNetworkCreatureVariable());
 		}
 
-		_sensors[sensorName].SetValue(value);
+		_sensors[sensorName].VariableValue = value;
 
 		return value;
 	}
