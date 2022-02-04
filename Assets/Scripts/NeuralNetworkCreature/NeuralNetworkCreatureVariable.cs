@@ -2,16 +2,52 @@ public class NeuralNetworkCreatureVariable : INeuralNetworkCreatureVariable
 {
 	public virtual string Name { get; protected set; }
 
-	public virtual float VariableValue { get; set; }
-
-	public NeuralNetworkCreatureVariable(string name = null, float value = 0)
+	private float _variableValue;
+	public virtual float Value
 	{
-		Name = name;
-		VariableValue = value;
+		get
+		{
+			return _variableValue;
+		}
+		set
+		{
+			if (value > Max)
+			{
+				_variableValue = Max;
+			}
+			else if (value < Min)
+			{
+				_variableValue = Min;
+			}
+			else
+			{
+				_variableValue = value;
+			}
+		}
 	}
 
-	public NeuralNetworkCreatureVariable CopyCreatureVariable()
+	public float Max { get; set; }
+	public float Min { get; set; }
+
+	public static NeuralNetworkCreatureVariable operator +(NeuralNetworkCreatureVariable a, NeuralNetworkCreatureVariable b) => new NeuralNetworkCreatureVariable(a.Name, a.Value + b.Value);
+	public static NeuralNetworkCreatureVariable operator -(NeuralNetworkCreatureVariable a, NeuralNetworkCreatureVariable b) => new NeuralNetworkCreatureVariable(a.Name, a.Value - b.Value);
+	public static NeuralNetworkCreatureVariable operator *(NeuralNetworkCreatureVariable a, NeuralNetworkCreatureVariable b) => new NeuralNetworkCreatureVariable(a.Name, a.Value * b.Value);
+	public static NeuralNetworkCreatureVariable operator /(NeuralNetworkCreatureVariable a, NeuralNetworkCreatureVariable b) => new NeuralNetworkCreatureVariable(a.Name, a.Value / b.Value);
+	public static NeuralNetworkCreatureVariable operator +(NeuralNetworkCreatureVariable a, float b) => new NeuralNetworkCreatureVariable(a.Name, a.Value + b);
+	public static NeuralNetworkCreatureVariable operator -(NeuralNetworkCreatureVariable a, float b) => new NeuralNetworkCreatureVariable(a.Name, a.Value - b);
+	public static NeuralNetworkCreatureVariable operator *(NeuralNetworkCreatureVariable a, float b) => new NeuralNetworkCreatureVariable(a.Name, a.Value * b);
+	public static NeuralNetworkCreatureVariable operator /(NeuralNetworkCreatureVariable a, float b) => new NeuralNetworkCreatureVariable(a.Name, a.Value / b);
+
+	public NeuralNetworkCreatureVariable(string name = null, float value = 0, float minValue = float.MinValue, float maxValue = float.MaxValue)
 	{
-		return new NeuralNetworkCreatureVariable(Name, VariableValue);
+		Name = name;
+		Min = minValue;
+		Max = maxValue;
+		Value = value;
+	}
+
+	public NeuralNetworkCreatureVariable Copy()
+	{
+		return new NeuralNetworkCreatureVariable(Name, Value, Min, Max);
 	}
 }

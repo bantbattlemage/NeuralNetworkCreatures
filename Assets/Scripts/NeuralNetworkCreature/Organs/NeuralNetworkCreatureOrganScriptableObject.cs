@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewOrganScriptableObject", menuName = "ScriptableObjects/OrganScriptableObject", order = 1)]
@@ -9,23 +10,45 @@ public class NeuralNetworkCreatureOrganScriptableObject : ScriptableObject
 
 	public NeuralNetworkCreatureOrgan Instantiate(NeuralNetworkCreature creature)
 	{
+		NeuralNetworkCreatureOrgan newOrgan = null;
+		List<NeuralNetworkCreatureVariable> variables = new List<NeuralNetworkCreatureVariable>();
+
 		switch (Organ)
 		{
 			case NeuralNetworkCreatureOrganType.Heartbeat:
-				return new HeartbeatInputOrgan(creature, Organ);
+				newOrgan = new HeartbeatInputOrgan();
+				newOrgan.Initialize(creature, Organ, variables);
+				break;
 			case NeuralNetworkCreatureOrganType.SpatialAwareness:
-				return new SpatialAwarenessInputOrgan(creature, Organ);
+				newOrgan = new SpatialAwarenessInputOrgan();
+				newOrgan.Initialize(creature, Organ, variables);
+				break;
 			case NeuralNetworkCreatureOrganType.BasicMovement:
-				return new BasicMovementOutputOrgan(creature, Organ, ConfigurableFloat);
+				newOrgan = new BasicMovementOutputOrgan();
+				newOrgan.Initialize(creature, Organ, variables);
+				newOrgan.MutatableVariable.Value = ConfigurableFloat;
+				break;
 			case NeuralNetworkCreatureOrganType.BasicRotation:
-				return new BasicRotationOutputOrgan(creature, Organ, ConfigurableFloat);
+				newOrgan = new BasicRotationOutputOrgan();
+				newOrgan.Initialize(creature, Organ, variables);
+				newOrgan.MutatableVariable.Value = ConfigurableFloat;
+				break;
 			case NeuralNetworkCreatureOrganType.BasicVision:
-				return new BasicVisionInputOrgan(creature, Organ, ConfigurableInt, ConfigurableFloat);
+				BasicVisionInputOrgan organ = new BasicVisionInputOrgan();
+				variables.Add(new NeuralNetworkCreatureVariable("VisionDistance", ConfigurableFloat));
+				variables.Add(new NeuralNetworkCreatureVariable("Eyes", ConfigurableInt));
+				organ.Initialize(creature, Organ, variables);
+				newOrgan = organ;
+				break;
 			case NeuralNetworkCreatureOrganType.BasicPelletConsumption:
-				return new BasicPelletConsumptionInputOrgan(creature, Organ);
+				newOrgan = new BasicPelletConsumptionInputOrgan();
+				newOrgan.Initialize(creature, Organ, variables);
+				break;
 			default:
 				throw new System.Exception("No Organ type defined");
 		}
+
+		return newOrgan;
 	}
 
 	public NeuralNetworkCreatureInheritableTrait Instantiate(NeuralNetworkCreature creature, bool isTrait)
@@ -35,12 +58,20 @@ public class NeuralNetworkCreatureOrganScriptableObject : ScriptableObject
 			throw new System.Exception("Call other Instantiate function to get an Organ that is not a Trait");
 		}
 
+		NeuralNetworkCreatureInheritableTrait newOrgan = null;
+		List<NeuralNetworkCreatureVariable> variables = new List<NeuralNetworkCreatureVariable>();
+
 		switch (Organ)
 		{
 			case NeuralNetworkCreatureOrganType.ColorTrait:
-				return new ColorTrait(creature, NeuralNetworkCreatureOrganType.ColorTrait, new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
+				newOrgan = new ColorTrait();
+				break;
 			default:
 				throw new System.Exception("No Organ type defined");
 		}
+
+		newOrgan.Initialize(creature, Organ, variables);
+
+		return newOrgan;
 	}
 }

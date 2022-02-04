@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: BasicVisionOrgan
   m_EditorClassIdentifier: 
   Organ: 6
-  ConfigurableInt: 4
-  ConfigurableFloat: 40
+  ConfigurableInt: 1
+  ConfigurableFloat: 100

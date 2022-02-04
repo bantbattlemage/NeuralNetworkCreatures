@@ -1,24 +1,16 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BasicMovementOutputOrgan : NeuralNetworkCreatureOutputOrgan
 {
-	public BasicMovementOutputOrgan(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, float speed) : base(creature, type)
-	{
-		_creature = creature;
-		VariableValue = speed;
-		Type = type;
-
-		Initialize("BasicMovement");
-	}
-
 	public override void Process()
 	{
 		MoveForward();
 	}
 
-	public void MoveForward()
+	private void MoveForward()
 	{
-		Vector3 newPosition = _creature.transform.position + (_creature.transform.forward * VariableValue * GetOutputValue());
+		Vector3 newPosition = _creature.transform.position + (_creature.transform.forward * MutatableVariable.Value * GetOutputValue());
 
 		if(!GameController.Instance.IsOutOfBounds(newPosition))
 		{

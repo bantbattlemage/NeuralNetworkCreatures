@@ -5,26 +5,7 @@ using System.Collections.Generic;
 /// </summary>
 public class NeuralNetworkCreatureInputOrgan : NeuralNetworkCreatureOrgan
 {
-	protected Dictionary<string, NeuralNetworkCreatureVariable> _sensors = new Dictionary<string, NeuralNetworkCreatureVariable>();
-
-	public int SensorCount { get { return _sensors.Count; } }
-
-	public NeuralNetworkCreatureInputOrgan(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type) : base(creature, type)
-	{
-		_creature = creature;
-	}
-
-	public NeuralNetworkCreatureInputOrgan Initialize(string name, NeuralNetworkCreatureVariable[] sensors)
-	{
-		Name = name;
-
-		for (int i = 0; i < sensors.Length; i++)
-		{
-			_sensors.Add(sensors[i].Name, sensors[i]);
-		}
-
-		return this;
-	}
+	public int SensorCount { get { return OrganVariables.Values.Count; } }
 
 	/// <summary>
 	/// Run the organs function to update it's sensor values. Called when the creature's NeuralNetwork is processed. (Empty if organ implementation does not define function)
@@ -39,12 +20,12 @@ public class NeuralNetworkCreatureInputOrgan : NeuralNetworkCreatureOrgan
 	/// </summary>
 	public float[] GetInputValues()
 	{
-		float[] output = new float[_sensors.Count];
+		float[] output = new float[SensorCount];
 
 		int i = 0;
-		foreach(KeyValuePair<string, NeuralNetworkCreatureVariable> kvp in _sensors)
+		foreach(NeuralNetworkCreatureVariable v in OrganVariables.Values)
 		{
-			output[i] = kvp.Value.VariableValue;
+			output[i] = v.Value;
 			i++;
 		}
 
@@ -56,12 +37,12 @@ public class NeuralNetworkCreatureInputOrgan : NeuralNetworkCreatureOrgan
 	/// </summary>
 	public float SetInputValue(string sensorName, float value)
 	{
-		if(!_sensors.ContainsKey(sensorName))
+		if(!OrganVariables.ContainsKey(sensorName))
 		{
-			_sensors.Add(sensorName, new NeuralNetworkCreatureVariable());
+			OrganVariables.Add(sensorName, new NeuralNetworkCreatureVariable());
 		}
 
-		_sensors[sensorName].VariableValue = value;
+		OrganVariables[sensorName].Value = value;
 
 		return value;
 	}

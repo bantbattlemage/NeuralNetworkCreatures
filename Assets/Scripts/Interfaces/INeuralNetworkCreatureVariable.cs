@@ -1,4 +1,4 @@
 public interface INeuralNetworkCreatureVariable
 {
-	public NeuralNetworkCreatureVariable CopyCreatureVariable();
+	public NeuralNetworkCreatureVariable Copy();
 }

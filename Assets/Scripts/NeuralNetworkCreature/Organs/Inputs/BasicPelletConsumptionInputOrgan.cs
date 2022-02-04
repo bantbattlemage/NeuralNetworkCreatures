@@ -1,16 +1,16 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BasicPelletConsumptionInputOrgan : NeuralNetworkCreatureInputOrgan
 {
-	public BasicPelletConsumptionInputOrgan(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type) : base(creature, type)
+	public override void Initialize(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, List<NeuralNetworkCreatureVariable> variables = null)
 	{
-		_creature = creature;
-		Type = type;
-		creature.OnCreatureCollision += OnCollision;
+		base.Initialize(creature, type, variables);
 
 		NeuralNetworkCreatureVariable sensor = new NeuralNetworkCreatureVariable("HasEaten", 0);
+		OrganVariables.Add(sensor.Name, sensor);
 
-		Initialize("BasicPelletConsumption", new NeuralNetworkCreatureVariable[] { sensor });
+		creature.OnCreatureCollision += OnCollision;
 	}
 
 	private void OnCollision(Collision collision)
@@ -18,7 +18,7 @@ public class BasicPelletConsumptionInputOrgan : NeuralNetworkCreatureInputOrgan
 		if (collision.collider.CompareTag("Pellet"))
 		{
 			_creature.Network.Fitness++;
-			_sensors["HasEaten"].VariableValue = 1;
+			OrganVariables["HasEaten"].Value = 1;
 			_creature.ProcessNetworkInputs();
 			Object.Destroy(collision.gameObject);
 		}
@@ -26,7 +26,7 @@ public class BasicPelletConsumptionInputOrgan : NeuralNetworkCreatureInputOrgan
 
 	public override void UpdateSensors()
 	{
-		_sensors["HasEaten"].VariableValue = 0;
+		OrganVariables["HasEaten"].Value = 0;
 	}
 
 	public override NeuralNetworkCreatureOrgan CreateDeepCopy()

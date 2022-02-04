@@ -158,7 +158,7 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		//	Initialize creauture output organs
 		for (int i = 0; i < outputOrgans.Count; i++)
 		{
-			outputOrgans[i].VariableValue = parent._outputOrgans[outputOrgans[i].Name].VariableValue;	//	set the internal organ modifier value to the parent's value
+			outputOrgans[i].MutatableVariable = parent._outputOrgans[outputOrgans[i].Name].MutatableVariable.Copy();	//	set the internal organ modifier value to the parent's value
 			outputOrgans[i].Mutate();
 			_outputOrgans.Add(outputOrgans[i].Name, outputOrgans[i]);
 		}

@@ -7,10 +7,9 @@ using UnityEngine;
 /// </summary>
 public class SpatialAwarenessInputOrgan : NeuralNetworkCreatureInputOrgan
 {
-	public SpatialAwarenessInputOrgan(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type) : base(creature, type)
+	public override void Initialize(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, List<NeuralNetworkCreatureVariable> variables = null)
 	{
-		_creature = creature;
-		Type = type;
+		base.Initialize(creature, type, variables);
 
 		NeuralNetworkCreatureVariable[] directionalSensors = new NeuralNetworkCreatureVariable[4];
 
@@ -19,26 +18,29 @@ public class SpatialAwarenessInputOrgan : NeuralNetworkCreatureInputOrgan
 		directionalSensors[2] = new NeuralNetworkCreatureVariable("Z", _creature.transform.position.z);
 		directionalSensors[3] = new NeuralNetworkCreatureVariable("R", _creature.transform.rotation.y);
 
-		Initialize("SpatialAwareness", directionalSensors);
+		for(int i = 0; i < directionalSensors.Length; i++)
+		{
+			OrganVariables.Add(directionalSensors[i].Name, directionalSensors[i]);
+		}
 	}
 
 	public override void UpdateSensors()
 	{
-		foreach (KeyValuePair<string, NeuralNetworkCreatureVariable> kvp in _sensors)
+		foreach (NeuralNetworkCreatureVariable sensor in OrganVariables.Values)
 		{
-			switch (kvp.Value.Name)
+			switch (sensor.Name)
 			{
 				case "X":
-					kvp.Value.VariableValue = _creature.transform.position.x;
+					sensor.Value = _creature.transform.position.x;
 					break;
 				case "Y":
-					kvp.Value.VariableValue = _creature.transform.position.y;
+					sensor.Value = _creature.transform.position.y;
 					break;
 				case "Z":
-					kvp.Value.VariableValue = _creature.transform.position.z;
+					sensor.Value = _creature.transform.position.z;
 					break;
 				case "R":
-					kvp.Value.VariableValue = _creature.transform.rotation.y;
+					sensor.Value = _creature.transform.rotation.y;
 					break;
 				default:
 					throw new System.Exception("unknown sensor");

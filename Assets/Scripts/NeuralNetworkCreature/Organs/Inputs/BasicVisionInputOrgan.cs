@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -5,58 +6,47 @@ using UnityEngine;
 /// </summary>
 public class BasicVisionInputOrgan : NeuralNetworkCreatureInputOrgan
 {
-	private float _visionDistance;
-
-	public BasicVisionInputOrgan(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, int sensorCount, float visionDistance) : base(creature, type)
+	public override void Initialize(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, List<NeuralNetworkCreatureVariable> variables = null)
 	{
-		_creature = creature;
-		Type = type;
-		_visionDistance = visionDistance;
+		base.Initialize(creature, type, variables);
 
-		NeuralNetworkCreatureVariable[] rayResults = new NeuralNetworkCreatureVariable[sensorCount];
+		MutatableVariable.Min = 0;
+		MutatableVariable.Max = GameController.Instance.WorldSize.x;
+		MutatableVariable.Value = variables[0].Value;
 
-		for(int i = 0; i < sensorCount; i++)
+		OrganVariables = new Dictionary<string, NeuralNetworkCreatureVariable>();
+
+		for (int i = 0; i < variables[1].Value; i++)
 		{
 			string name = i.ToString();
-			rayResults[i] = new NeuralNetworkCreatureVariable(name, 0);
+			OrganVariables.Add(name, new NeuralNetworkCreatureVariable(name));
 		}
-
-		Initialize("BasicVision", rayResults);
 	}
 
 	public override void UpdateSensors()
 	{
-		for (int i = 0; i < _sensors.Count; i++)
+		for (int i = 0; i < OrganVariables.Count; i++)
 		{
-			Vector3 newVector = Quaternion.AngleAxis(i * (360f/_sensors.Count), Vector3.up) * _creature.transform.forward;
+			Vector3 newVector = Quaternion.AngleAxis(i * (360f/ OrganVariables.Count), Vector3.up) * _creature.transform.forward;
 			RaycastHit hit;
 			Ray ray = new Ray(_creature.transform.position + newVector, newVector);
 			//Debug.DrawRay(ray.origin, ray.direction, Color.red);
 
-			if (Physics.Raycast(ray, out hit, _visionDistance))
+			if (Physics.Raycast(ray, out hit, MutatableVariable.Value))
 			{
 				if(hit.transform.CompareTag("Pellet"))
 				{
-					_sensors[i.ToString()].VariableValue = hit.distance;
+					OrganVariables[i.ToString()].Value = hit.distance;
 				}
-				//else if(hit.transform.CompareTag("NetworkObject") && hit.transform != _creature.transform)
-				//{
-				//	_sensors[i.ToString()].SetValue(-hit.distance);
-				//}
 				else
 				{
-					_sensors[i.ToString()].VariableValue = 0;
+					OrganVariables[i.ToString()].Value = 0;
 				}
 			}
 			else
 			{
-				_sensors[i.ToString()].VariableValue = 0;
+				OrganVariables[i.ToString()].Value = 0;
 			}
 		}
-	}
-
-	public override NeuralNetworkCreatureOrgan CreateDeepCopy()
-	{
-		return base.CreateDeepCopy();
 	}
 }

@@ -9,23 +9,29 @@ public class HeartbeatInputOrgan : NeuralNetworkCreatureInputOrgan
 {
 	private float _lifetime = 0;
 
-	public HeartbeatInputOrgan(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type) : base(creature, type)
+	public override void Initialize(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, List<NeuralNetworkCreatureVariable> variables = null)
 	{
-		_creature = creature;
-		Type = type;
+		base.Initialize(creature, type, variables);
 
 		NeuralNetworkCreatureVariable[] heartbeat = new NeuralNetworkCreatureVariable[2];
 
 		heartbeat[0] = new NeuralNetworkCreatureVariable("Lifetime", _lifetime);
 		heartbeat[1] = new NeuralNetworkCreatureVariable("Rhythm", Mathf.Sin(_lifetime));
-
-		Initialize("Heartbeat", heartbeat);
+		OrganVariables.Add(heartbeat[0].Name, heartbeat[0]);
+		OrganVariables.Add(heartbeat[1].Name, heartbeat[1]);
 	}
 
 	public override void UpdateSensors()
 	{
-		_sensors["Lifetime"].VariableValue = _lifetime;
-		_sensors["Rhythm"].VariableValue = Mathf.Sin(_lifetime);
+		OrganVariables["Lifetime"].Value = _lifetime;
+		OrganVariables["Rhythm"].Value = Mathf.Sin(_lifetime);
 		_lifetime++;
+	}
+
+	public override NeuralNetworkCreatureOrgan CreateDeepCopy()
+	{
+		HeartbeatInputOrgan copy = base.CreateDeepCopy() as HeartbeatInputOrgan;
+		copy._lifetime = _lifetime;
+		return copy;
 	}
 }
