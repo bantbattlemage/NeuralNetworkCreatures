@@ -52,5 +52,7 @@ MonoBehaviour:
   NeuralNetworkCreaturePrefab: {fileID: 393616942934541756, guid: f7de59fb6e859a246a51a0f062ea21ca, type: 3}
   PelletPrefab: {fileID: 5102762972465418086, guid: 19f4e98379d565840960bc38d15ac262, type: 3}
   UIText: {fileID: 0}
-  TimeScaler: {fileID: 0}
+  TimeScaleUI: {fileID: 0}
+  SaveLoadUI: {fileID: 0}
+  MutationUI: {fileID: 0}
   WorldFloor: {fileID: 0}

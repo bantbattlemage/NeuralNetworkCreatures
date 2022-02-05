@@ -138,6 +138,8 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	public void Initialize(NeuralNetwork network, NeuralNetworkCreature parent)
 	{
 		InitializeTraits(parent.GetTraits());
+		InitializeInputOrgans(parent.GetInputOrgans());
+		InitializeOutputOrgans(parent.GetOutputOrgans());
 
 		Network = network;
 		_internalLayers = network.Layers.Length - 2;
@@ -146,32 +148,22 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 			_internalLayerSize = network.Layers[1];
 		}
 
-		List<NeuralNetworkCreatureInputOrgan> inputOrgans = new List<NeuralNetworkCreatureInputOrgan>();
-		List<NeuralNetworkCreatureOutputOrgan> outputOrgans = new List<NeuralNetworkCreatureOutputOrgan>();
 
-		foreach (NeuralNetworkCreatureOrganScriptableObject o in InputOrgans)
-		{
-			inputOrgans.Add((NeuralNetworkCreatureInputOrgan)o.Instantiate(this));
-		}
+		////	Initialize creature input organs
+		//for (int i = 0; i < inputOrgans.Count; i++)
+		//{
+		//	inputOrgans[i].MutatableVariable = parent._outputOrgans[outputOrgans[i].Name].MutatableVariable.Copy();    //	set the internal organ modifier value to the parent's value
+		//	inputOrgans[i].Mutate();
+		//	_inputOrgans.Add(inputOrgans[i].Name, inputOrgans[i]);
+		//}
 
-		foreach (NeuralNetworkCreatureOrganScriptableObject o in OutputOrgans)
-		{
-			outputOrgans.Add((NeuralNetworkCreatureOutputOrgan)o.Instantiate(this));
-		}
-
-		//	Initialize creature input organs
-		for (int i = 0; i < inputOrgans.Count; i++)
-		{
-			_inputOrgans.Add(inputOrgans[i].Name, inputOrgans[i]);
-		}
-
-		//	Initialize creauture output organs
-		for (int i = 0; i < outputOrgans.Count; i++)
-		{
-			outputOrgans[i].MutatableVariable = parent._outputOrgans[outputOrgans[i].Name].MutatableVariable.Copy();	//	set the internal organ modifier value to the parent's value
-			outputOrgans[i].Mutate();
-			_outputOrgans.Add(outputOrgans[i].Name, outputOrgans[i]);
-		}
+		////	Initialize creauture output organs
+		//for (int i = 0; i < outputOrgans.Count; i++)
+		//{
+		//	outputOrgans[i].MutatableVariable = parent._outputOrgans[outputOrgans[i].Name].MutatableVariable.Copy();	//	set the internal organ modifier value to the parent's value
+		//	outputOrgans[i].Mutate();
+		//	_outputOrgans.Add(outputOrgans[i].Name, outputOrgans[i]);
+		//}
 
 		_initialized = true;
 	}
@@ -203,14 +195,19 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		}
 
 		string json = SaveUtils.ToJson(data);
-		string filePath = Application.persistentDataPath + "/savedCreature0.json";
+		string filePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "SavedData" + Path.DirectorySeparatorChar + "savedCreature0.json";
+
+		if(!Directory.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "SavedData"))
+		{
+			Directory.CreateDirectory(Application.persistentDataPath + Path.DirectorySeparatorChar + "SavedData");
+		}
 
 		if (File.Exists(filePath))
 		{
 			int count = 0;
 			while (File.Exists(filePath))
 			{
-				filePath = Application.persistentDataPath + string.Format("/savedCreature{0}.json", count);
+				filePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "SavedData" + Path.DirectorySeparatorChar + string.Format("savedCreature{0}.json", count);
 				count++;
 			}
 
@@ -259,7 +256,7 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 				case NeuralNetworkCreatureOrganType.ColorTrait:
 					ColorTrait c = new ColorTrait();
 					c.Initialize(this, trait.Type, trait.OrganVariables.Values.ToList());
-					c.MutatableVariable = trait.MutatableVariable;
+					c.MutatableVariable = trait.MutatableVariable.Copy();
 					c.ApplyTraitValue();
 					newTrait = c;
 					break;
@@ -303,7 +300,7 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 			}
 
 			newOrgan.Initialize(this, organ.Type, variables);
-			newOrgan.MutatableVariable.Value = organ.MutatableVariable.Value;
+			newOrgan.MutatableVariable = organ.MutatableVariable.Copy();
 
 			if (mutate)
 			{
@@ -334,7 +331,7 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 			}
 
 			newOrgan.Initialize(this, organ.Type, variables);
-			newOrgan.MutatableVariable.Value = organ.MutatableVariable.Value;
+			newOrgan.MutatableVariable = organ.MutatableVariable.Copy();
 
 			if (mutate)
 			{
@@ -365,6 +362,16 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	public List<NeuralNetworkCreatureInheritableTrait> GetTraits()
 	{
 		return _traits.Values.ToList();
+	}
+
+	public List<NeuralNetworkCreatureInputOrgan> GetInputOrgans()
+	{
+		return _inputOrgans.Values.ToList();
+	}
+
+	public List<NeuralNetworkCreatureOutputOrgan> GetOutputOrgans()
+	{
+		return _outputOrgans.Values.ToList();
 	}
 
 	/// <summary>
@@ -425,7 +432,8 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	/// </summary>
 	public NeuralNetworkCreature Reproduce(NeuralNetworkCreature otherParent, Vector3 location)
 	{
-		NeuralNetworkCreature newCreature = Instantiate(gameObject, location, new Quaternion()).GetComponent<NeuralNetworkCreature>();
+		Quaternion rotation = Quaternion.Euler(0, UnityEngine.Random.Range(0f, 360f), 0);
+		NeuralNetworkCreature newCreature = Instantiate(gameObject, location, rotation).GetComponent<NeuralNetworkCreature>();
 		newCreature.Initialize(Network.CreateChildNetwork(otherParent.Network), this);
 		newCreature.Mutate(GameController.Instance.MutationChance, GameController.Instance.MutationStrength);
 		return newCreature;

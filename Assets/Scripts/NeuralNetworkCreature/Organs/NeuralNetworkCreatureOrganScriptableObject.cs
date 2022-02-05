@@ -10,7 +10,7 @@ public class NeuralNetworkCreatureOrganScriptableObject : ScriptableObject
 
 	public NeuralNetworkCreatureOrgan Instantiate(NeuralNetworkCreature creature)
 	{
-		NeuralNetworkCreatureOrgan newOrgan = null;
+		NeuralNetworkCreatureOrgan newOrgan;
 		List<NeuralNetworkCreatureVariable> variables = new List<NeuralNetworkCreatureVariable>();
 
 		switch (Organ)

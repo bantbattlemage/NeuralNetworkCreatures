@@ -18,7 +18,7 @@ public class NeuralNetworkCreatureOrgan : INeuralNetworkCreatureOrgan
 		Type = type;
 		Name = type.ToString();
 		OrganVariables = new Dictionary<string, NeuralNetworkCreatureVariable>();
-		MutatableVariable = new NeuralNetworkCreatureVariable("MutatableVariable", Random.Range(-1, 1));
+		MutatableVariable = new NeuralNetworkCreatureVariable("MutatableVariable", Random.Range(-1f, 1f));
 
 		if (variables != null)
 		{
@@ -37,7 +37,7 @@ public class NeuralNetworkCreatureOrgan : INeuralNetworkCreatureOrgan
 	public virtual void Mutate()
 	{
 		float m = GameController.Instance.RollMutationFactor();
-		MutatableVariable += m;
+		MutatableVariable.Value += m;
 		MutatableVariable.Value = Mathf.Clamp(MutatableVariable.Value, MutatableVariable.Min, MutatableVariable.Max);
 	}
 

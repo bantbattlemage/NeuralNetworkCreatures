@@ -18,6 +18,14 @@ public class LoadCreatureUI : MonoBehaviour
 		UIGroup.SetActive(false);
 	}
 
+	private void Update()
+	{
+		if(Input.GetMouseButton(0) && !UIFunctions.IsPointerOverUI)
+		{
+			OnCloseButtonPressed();
+		}
+	}
+
 	public void OnOpenButtonPressed()
 	{
 		UIGroup.SetActive(true);
@@ -73,14 +81,18 @@ public class LoadCreatureUI : MonoBehaviour
 		OptionsDropdown.options.Add(new Dropdown.OptionData("None"));
 		OptionsDropdown.value = 0;
 
-		DirectoryInfo info = new DirectoryInfo(Application.persistentDataPath);
+		if (!Directory.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + "SavedData"))
+		{
+			Directory.CreateDirectory(Application.persistentDataPath + Path.DirectorySeparatorChar + "SavedData");
+		}
+
+		DirectoryInfo info = new DirectoryInfo(Application.persistentDataPath + Path.DirectorySeparatorChar + "SavedData");
 		FileInfo[] fileInfo = info.GetFiles();
 		foreach(FileInfo file in fileInfo)
 		{
-			string name = file.Name;
-			string filePath = Application.persistentDataPath + "/" + name;
+			string filePath = Application.persistentDataPath + Path.DirectorySeparatorChar + "SavedData" + Path.DirectorySeparatorChar + file.Name;
 			_cachedFilePaths.Add(filePath);
-			OptionsDropdown.options.Add(new Dropdown.OptionData(name));
+			OptionsDropdown.options.Add(new Dropdown.OptionData(file.Name));
 		}
 	}
 }

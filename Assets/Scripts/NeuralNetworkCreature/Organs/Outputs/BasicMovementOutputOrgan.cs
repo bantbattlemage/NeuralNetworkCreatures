@@ -3,6 +3,13 @@ using UnityEngine;
 
 public class BasicMovementOutputOrgan : NeuralNetworkCreatureOutputOrgan
 {
+	public override void Initialize(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, List<NeuralNetworkCreatureVariable> variables = null)
+	{
+		base.Initialize(creature, type, variables);
+		MutatableVariable.Min = -10f;
+		MutatableVariable.Max = 10f;
+	}
+
 	public override void Process()
 	{
 		MoveForward();

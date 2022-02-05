@@ -17,9 +17,13 @@ public class GameController : MonoBehaviour
 	public GameObject NeuralNetworkCreaturePrefab;
 	public GameObject PelletPrefab;
 
-	[Header("Scene References")]
+	[Header("Scene UI References")]
 	public Text UIText;
-	public TimeScaleController TimeScaler;
+	public TimeScaleController TimeScaleUI;
+	public LoadCreatureUI SaveLoadUI;
+	public MutationAdjustmentController MutationUI;
+
+	[Header("Scene References")]
 	public GameObject WorldFloor;
 
 	private int _currentGeneration;
@@ -37,7 +41,7 @@ public class GameController : MonoBehaviour
 	{
 		InitializeWorld();
 		InvokeRepeating("IncrementSimulation", GenerationDuration, GenerationDuration);
-		TimeScaler.SetTimeScale(Timescale);
+		TimeScaleUI.SetTimeScale(Timescale);
 	}
 
 	public void SaveBestCreature()
@@ -160,9 +164,10 @@ public class GameController : MonoBehaviour
 
 		for (int i = 0; i < Population; i++)
 		{
-			Vector3 randomCoords = new Vector3(Random.Range(0, WorldSize.x - 5) - WorldSize.x / 2, 0, Random.Range(0, WorldSize.y - 5) - WorldSize.y / 2);
+			Vector3 randomCoords = GetRandomWorldCoordinates(5, 5);
+			Quaternion randomRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
 
-			NeuralNetworkCreature newCreature = Instantiate(NeuralNetworkCreaturePrefab, randomCoords, new Quaternion()).GetComponent<NeuralNetworkCreature>();
+			NeuralNetworkCreature newCreature = Instantiate(NeuralNetworkCreaturePrefab, randomCoords, randomRotation).GetComponent<NeuralNetworkCreature>();
 			newCreature.Initialize();
 			newCreature.Network.Fitness = 0;
 
