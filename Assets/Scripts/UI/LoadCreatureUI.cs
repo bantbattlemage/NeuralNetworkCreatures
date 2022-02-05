@@ -26,8 +26,14 @@ public class LoadCreatureUI : MonoBehaviour
 
 	public void OnCloseButtonPressed()
 	{
-		UIGroup.SetActive(false);
 		_cachedFilePaths = new List<string>();
+		UIGroup.SetActive(false);
+	}
+
+	public void OnSaveButtonPressed()
+	{
+		GameController.Instance.SaveBestCreature();
+		Debug.Log("Saved");
 	}
 
 	public void OnValueChanged()
@@ -47,6 +53,19 @@ public class LoadCreatureUI : MonoBehaviour
 		OnCloseButtonPressed();
 	}
 
+	public void Delete()
+	{
+		if (_cachedFilePaths.Count == 0 || OptionsDropdown.value == 0)
+		{
+			OnCloseButtonPressed();
+			return;
+		}
+
+		string path = _cachedFilePaths[OptionsDropdown.value - 1];
+		File.Delete(path);
+		Initialize();
+	}
+
 	public void Initialize()
 	{
 		_cachedFilePaths = new List<string>();
@@ -54,20 +73,14 @@ public class LoadCreatureUI : MonoBehaviour
 		OptionsDropdown.options.Add(new Dropdown.OptionData("None"));
 		OptionsDropdown.value = 0;
 
-		string fileName = "newSavedCreature.json";
-		string filePath = Application.persistentDataPath + "/" + fileName;
-
-		if (File.Exists(filePath))
+		DirectoryInfo info = new DirectoryInfo(Application.persistentDataPath);
+		FileInfo[] fileInfo = info.GetFiles();
+		foreach(FileInfo file in fileInfo)
 		{
-			int count = 0;
-			while (File.Exists(filePath))
-			{
-				_cachedFilePaths.Add(filePath);
-				OptionsDropdown.options.Add(new Dropdown.OptionData(fileName));
-				fileName = string.Format("/newSavedCreature{0}.json", count);
-				filePath = Application.persistentDataPath + "/" + fileName;
-				count++;
-			}
+			string name = file.Name;
+			string filePath = Application.persistentDataPath + "/" + name;
+			_cachedFilePaths.Add(filePath);
+			OptionsDropdown.options.Add(new Dropdown.OptionData(name));
 		}
 	}
 }

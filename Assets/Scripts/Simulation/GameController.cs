@@ -40,27 +40,17 @@ public class GameController : MonoBehaviour
 		TimeScaler.SetTimeScale(Timescale);
 	}
 
-	private void Update()
+	public void SaveBestCreature()
 	{
-		if (Input.GetKeyDown(KeyCode.S))
-		{
-			NeuralNetworkCreature best = _creatures.OrderByDescending(x => x.Network.Fitness).First();
-			best.SaveToJson();
-		}
+		NeuralNetworkCreature best = _creatures.OrderByDescending(x => x.Network.Fitness).First();
+		best.SaveToJson();
 	}
 
 	public void LoadCreature(string filePath)
 	{
 		CancelInvoke();
 		DestroyPellets();
-
-		foreach (NeuralNetworkCreature old in _creatures)
-		{
-			Destroy(old);
-			Destroy(old.gameObject);
-		}
-
-		_creatures = new List<NeuralNetworkCreature>();
+		DestroyAllCreatures();
 
 		for (int i = 0; i < Population; i++)
 		{
@@ -145,16 +135,20 @@ public class GameController : MonoBehaviour
 			}
 		}
 
-		foreach(NeuralNetworkCreature old in _creatures)
+		DestroyAllCreatures();
+		_creatures = newGeneration;
+
+		SpawnPellets();
+	}
+
+	public void DestroyAllCreatures()
+	{
+		foreach (NeuralNetworkCreature old in _creatures)
 		{
 			Destroy(old);
 			Destroy(old.gameObject);
 		}
-
 		_creatures = new List<NeuralNetworkCreature>();
-		_creatures = newGeneration;
-
-		SpawnPellets();
 	}
 
 	public void InitializeWorld()
@@ -176,6 +170,12 @@ public class GameController : MonoBehaviour
 		}
 
 		SpawnPellets();
+	}
+
+	public void ResetSimulation()
+	{
+		DestroyAllCreatures();
+		InitializeWorld();
 	}
 
 	public bool IsOutOfBounds(Vector3 vector)

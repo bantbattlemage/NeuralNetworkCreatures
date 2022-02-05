@@ -139,7 +139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 355100251548439611}
-  MaxDistanceToTarget: 90
+  MaxDistanceToTarget: 120
   MinimumDistanceToTarget: 30
 --- !u!20 &355100251513803786
 Camera:

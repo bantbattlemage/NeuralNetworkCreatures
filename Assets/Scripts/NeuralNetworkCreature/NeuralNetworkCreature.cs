@@ -203,14 +203,14 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		}
 
 		string json = SaveUtils.ToJson(data);
-		string filePath = Application.persistentDataPath + "/newSavedCreature.json";
+		string filePath = Application.persistentDataPath + "/savedCreature0.json";
 
 		if (File.Exists(filePath))
 		{
 			int count = 0;
 			while (File.Exists(filePath))
 			{
-				filePath = Application.persistentDataPath + string.Format("/newSavedCreature{0}.json", count);
+				filePath = Application.persistentDataPath + string.Format("/savedCreature{0}.json", count);
 				count++;
 			}
 
