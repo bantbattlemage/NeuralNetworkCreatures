@@ -42,22 +42,43 @@ public class GameController : MonoBehaviour
 
 	private void Update()
 	{
-		//if (Input.GetKeyDown(KeyCode.S))
-		//{
-		//	NeuralNetworkCreature best = _creatures.OrderByDescending(x => x.Network.Fitness).First();
-		//	NeuralNetworkCreatureScriptableObject.SaveCreatureToScriptableObject(best);
-		//	//best.Network.Save("Assets/SaveData/" + System.DateTime.Now.ToString("MM-dd-HH-ss") + ".txt");
-		//}
-	}
-
-	public float RollMutationFactor()
-	{
-		if(Random.Range(0, 100) < MutationChance)
+		if (Input.GetKeyDown(KeyCode.S))
 		{
-			return Random.Range(-MutationStrength, MutationStrength);
+			NeuralNetworkCreature best = _creatures.OrderByDescending(x => x.Network.Fitness).First();
+			best.SaveToJson();
 		}
 
-		return 0;
+		if (Input.GetKeyDown(KeyCode.L))
+		{
+			CancelInvoke();
+
+			string filePath = Application.persistentDataPath + "/newSavedCreature.json";
+
+			DestroyPellets();
+
+			foreach (NeuralNetworkCreature old in _creatures)
+			{
+				Destroy(old);
+				Destroy(old.gameObject);
+			}
+
+			_creatures = new List<NeuralNetworkCreature>();
+
+			for (int i = 0; i < Population; i++)
+			{
+				Vector3 randomCoords = GetRandomWorldCoordinates(5);
+				NeuralNetworkCreature newCreature = Instantiate(NeuralNetworkCreaturePrefab, randomCoords, new Quaternion()).GetComponent<NeuralNetworkCreature>();
+				newCreature.LoadFromJson(filePath);
+				newCreature.Mutate(MutationChance, MutationStrength);
+				_creatures.Add(newCreature);
+			}
+
+			_currentGeneration = 0;
+
+			SpawnPellets();
+
+			InvokeRepeating("IncrementSimulation", GenerationDuration, GenerationDuration);
+		}
 	}
 
 	private void SpawnPellets()
@@ -66,8 +87,7 @@ public class GameController : MonoBehaviour
 
 		for (int i = 0; i < Population; i++)
 		{
-			Vector3 randomCoords = new Vector3(Random.Range(0, WorldSize.x - 1) - WorldSize.x / 2, 0, Random.Range(0, WorldSize.y - 1) - WorldSize.y / 2);
-
+			Vector3 randomCoords = GetRandomWorldCoordinates(3, 3);
 			PelletObject newObject = Instantiate(PelletPrefab, randomCoords, new Quaternion()).GetComponent<PelletObject>();
 			_pellets.Add(newObject);
 		}
@@ -115,13 +135,7 @@ public class GameController : MonoBehaviour
 		{
 			for (int i = 0; i < sortedObjects.Count/2; i++)
 			{
-				Vector3 randomCoords = new Vector3(Random.Range(0, WorldSize.x - 5) - WorldSize.x / 2, 0, Random.Range(0, WorldSize.y - 5) - WorldSize.y / 2);
-
-				//NeuralNetworkCreature newCreature = Instantiate(NeuralNetworkCreaturePrefab, randomCoords, new Quaternion()).GetComponent<NeuralNetworkCreature>();
-				//NeuralNetworkCreature father = sortedObjects[Random.Range(0, i)];
-				//NeuralNetwork childNetwork = sortedObjects[i].Network.CreateChildNetwork(father.Network);
-				//newCreature.Initialize(childNetwork, father.GetTraits());
-				//newCreature.Mutate(MutationChance, MutationStrength);
+				Vector3 randomCoords = GetRandomWorldCoordinates(5, 5);
 
 				NeuralNetworkCreature father = sortedObjects[Random.Range(0, i)];
 				NeuralNetworkCreature newCreature = sortedObjects[i].Reproduce(father, randomCoords);
@@ -153,7 +167,7 @@ public class GameController : MonoBehaviour
 		_creatures = new List<NeuralNetworkCreature>();
 		_currentGeneration = 0;
 
-		for(int i = 0; i < Population; i++)
+		for (int i = 0; i < Population; i++)
 		{
 			Vector3 randomCoords = new Vector3(Random.Range(0, WorldSize.x - 5) - WorldSize.x / 2, 0, Random.Range(0, WorldSize.y - 5) - WorldSize.y / 2);
 
@@ -170,5 +184,20 @@ public class GameController : MonoBehaviour
 	public bool IsOutOfBounds(Vector3 vector)
 	{
 		return vector.x >= WorldSize.x / 2 || vector.x <= -(WorldSize.x / 2) || vector.z >= WorldSize.y / 2 || vector.z <= -(WorldSize.y / 2);
+	}
+
+	public Vector3 GetRandomWorldCoordinates(int xOffset = 0, int yOffset = 0)
+	{
+		return new Vector3(Random.Range(0, WorldSize.x - xOffset) - WorldSize.x / 2, 0, Random.Range(0, WorldSize.y - yOffset) - WorldSize.y / 2);
+	}
+
+	public float RollMutationFactor()
+	{
+		if (Random.Range(0, 100) < MutationChance)
+		{
+			return Random.Range(-MutationStrength, MutationStrength);
+		}
+
+		return 0;
 	}
 }

@@ -1,12 +1,14 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
+[System.Serializable]
 public class NeuralNetworkCreatureOrgan : INeuralNetworkCreatureOrgan
 {
-	public string Name { get; protected set; }
-	public virtual NeuralNetworkCreatureOrganType Type { get; protected set; }
-	public NeuralNetworkCreatureVariable MutatableVariable { get; set; }
-	public Dictionary<string, NeuralNetworkCreatureVariable> OrganVariables { get; protected set; }
+	public string Name;
+	public NeuralNetworkCreatureOrganType Type;
+	public NeuralNetworkCreatureVariable MutatableVariable;
+	public Dictionary<string, NeuralNetworkCreatureVariable> OrganVariables;
 
 	protected NeuralNetworkCreature _creature;
 
@@ -27,6 +29,11 @@ public class NeuralNetworkCreatureOrgan : INeuralNetworkCreatureOrgan
 		}
 	}
 
+	public void SetCreature(NeuralNetworkCreature creature)
+	{
+		_creature = creature;
+	}
+
 	public virtual void Mutate()
 	{
 		float m = GameController.Instance.RollMutationFactor();
@@ -36,6 +43,9 @@ public class NeuralNetworkCreatureOrgan : INeuralNetworkCreatureOrgan
 
 	public virtual NeuralNetworkCreatureOrgan CreateDeepCopy()
 	{
-		throw new System.NotImplementedException();
+		NeuralNetworkCreatureOrgan copy = new NeuralNetworkCreatureOrgan();
+		copy.Initialize(_creature, Type, OrganVariables.Values.ToList());
+
+		return copy;
 	}
 }

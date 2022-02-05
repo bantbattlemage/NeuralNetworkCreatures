@@ -5,19 +5,28 @@ using UnityEngine;
 
 public class ColorTrait : NeuralNetworkCreatureInheritableTrait
 {
-	public Color ColorValue;
+	private Color _colorValue;
 
 	public override void Initialize(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, List<NeuralNetworkCreatureVariable> variables = null)
 	{
 		base.Initialize(creature, type, variables);
-		ColorValue = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+
+		if(variables == null || variables.Count == 0)
+		{
+			OrganVariables.Add("R", new NeuralNetworkCreatureVariable("R", Random.Range(0f, 1f)));
+			OrganVariables.Add("G", new NeuralNetworkCreatureVariable("G", Random.Range(0f, 1f)));
+			OrganVariables.Add("B", new NeuralNetworkCreatureVariable("B", Random.Range(0f, 1f)));
+		}
+
+		_colorValue = new Color(OrganVariables["R"].Value, OrganVariables["G"].Value, OrganVariables["B"].Value);
 	}
 
-	public override NeuralNetworkCreatureInheritableTrait CreateDeepCopy(NeuralNetworkCreature creature)
+	public override NeuralNetworkCreatureOrgan CreateDeepCopy(NeuralNetworkCreature creature)
 	{
 		ColorTrait copy = new ColorTrait();
 		copy.Initialize(creature, Type, OrganVariables.Values.ToList());
-		copy.ColorValue = new Color(ColorValue.r, ColorValue.g, ColorValue.b);
+		copy._colorValue = new Color(_colorValue.r, _colorValue.g, _colorValue.b);
+		ApplyTraitValue();
 
 		return copy;
 	}
@@ -28,14 +37,16 @@ public class ColorTrait : NeuralNetworkCreatureInheritableTrait
 
 		if(r.material != null)
 		{
-			_creature.transform.GetComponent<MeshRenderer>().material.SetColor("_Color", ColorValue);
+			_creature.transform.GetComponent<MeshRenderer>().material.SetColor("_Color", _colorValue);
 		}
 	}
 
 	public override void Mutate()
 	{
-		ColorValue.r += GameController.Instance.RollMutationFactor();
-		ColorValue.b += GameController.Instance.RollMutationFactor();
-		ColorValue.g += GameController.Instance.RollMutationFactor();
+		OrganVariables["R"].Value += GameController.Instance.RollMutationFactor();
+		OrganVariables["G"].Value += GameController.Instance.RollMutationFactor();
+		OrganVariables["B"].Value += GameController.Instance.RollMutationFactor();
+
+		_colorValue = new Color(OrganVariables["R"].Value, OrganVariables["G"].Value, OrganVariables["B"].Value);
 	}
 }

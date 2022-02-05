@@ -11,16 +11,19 @@ public class SpatialAwarenessInputOrgan : NeuralNetworkCreatureInputOrgan
 	{
 		base.Initialize(creature, type, variables);
 
-		NeuralNetworkCreatureVariable[] directionalSensors = new NeuralNetworkCreatureVariable[4];
-
-		directionalSensors[0] = new NeuralNetworkCreatureVariable("X", _creature.transform.position.x);
-		directionalSensors[1] = new NeuralNetworkCreatureVariable("Y", _creature.transform.position.y);
-		directionalSensors[2] = new NeuralNetworkCreatureVariable("Z", _creature.transform.position.z);
-		directionalSensors[3] = new NeuralNetworkCreatureVariable("R", _creature.transform.rotation.y);
-
-		for(int i = 0; i < directionalSensors.Length; i++)
+		if(variables == null || variables.Count == 0)
 		{
-			OrganVariables.Add(directionalSensors[i].Name, directionalSensors[i]);
+			NeuralNetworkCreatureVariable[] directionalSensors = new NeuralNetworkCreatureVariable[4];
+
+			directionalSensors[0] = new NeuralNetworkCreatureVariable("X", _creature.transform.position.x);
+			directionalSensors[1] = new NeuralNetworkCreatureVariable("Y", _creature.transform.position.y);
+			directionalSensors[2] = new NeuralNetworkCreatureVariable("Z", _creature.transform.position.z);
+			directionalSensors[3] = new NeuralNetworkCreatureVariable("R", _creature.transform.rotation.y);
+
+			for (int i = 0; i < directionalSensors.Length; i++)
+			{
+				OrganVariables.Add(directionalSensors[i].Name, directionalSensors[i]);
+			}
 		}
 	}
 

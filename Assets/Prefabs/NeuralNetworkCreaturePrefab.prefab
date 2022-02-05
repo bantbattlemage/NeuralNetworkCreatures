@@ -58,6 +58,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bf763f277e3f7f34aa1f0b1e9ba02309, type: 2}
   InheritableTraits:
   - {fileID: 11400000, guid: d8424bd80e3e3b7468c5e637feb81085, type: 2}
+  StoredData:
+    Network:
+      Fitness: 0
+      Layers: 
 --- !u!33 &393616942934541753
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -34,11 +34,10 @@ public class NeuralNetworkCreatureOrganScriptableObject : ScriptableObject
 				newOrgan.MutatableVariable.Value = ConfigurableFloat;
 				break;
 			case NeuralNetworkCreatureOrganType.BasicVision:
-				BasicVisionInputOrgan organ = new BasicVisionInputOrgan();
-				variables.Add(new NeuralNetworkCreatureVariable("VisionDistance", ConfigurableFloat));
-				variables.Add(new NeuralNetworkCreatureVariable("Eyes", ConfigurableInt));
-				organ.Initialize(creature, Organ, variables);
-				newOrgan = organ;
+				newOrgan = new BasicVisionInputOrgan();
+				variables.Add(new NeuralNetworkCreatureVariable("0", 0));
+				newOrgan.Initialize(creature, Organ, variables);
+				newOrgan.MutatableVariable.Value = ConfigurableFloat;
 				break;
 			case NeuralNetworkCreatureOrganType.BasicPelletConsumption:
 				newOrgan = new BasicPelletConsumptionInputOrgan();

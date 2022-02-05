@@ -3,13 +3,14 @@ using System;
 using System.IO;
 using UnityEngine;
 
+[Serializable]
 public class NeuralNetwork : IComparable<NeuralNetwork>
 {
     public float Fitness = 0;
-    public int[] Layers { get; private set; }
-    private float[][] _neurons;
-    private float[][] _biases;
-    private float[][][] _weights;
+    public int[] Layers;
+    public float[][] _neurons;
+    public float[][] _biases;
+    public float[][][] _weights;
 
     public NeuralNetwork(int[] layers)
     {
@@ -31,10 +32,15 @@ public class NeuralNetwork : IComparable<NeuralNetwork>
         InitializeWeightsAndBiases();
     }
 
-    /// <summary>
-    /// Initialize the network weights & biases with random values between -0.5 and 0.5, with a 50% chance of being set to 0.
-    /// </summary>
-    private void InitializeWeightsAndBiases()
+	public string ToJson()
+	{
+        return SaveUtils.ToJson(this);
+	}
+
+	/// <summary>
+	/// Initialize the network weights & biases with random values between -0.5 and 0.5, with a 50% chance of being set to 0.
+	/// </summary>
+	private void InitializeWeightsAndBiases()
     {
         //  initialize biases
         List<float[]> biasList = new List<float[]>();
@@ -183,6 +189,7 @@ public class NeuralNetwork : IComparable<NeuralNetwork>
     public NeuralNetwork CreateDeepCopy()
     {
         NeuralNetwork deepCopy = new NeuralNetwork(Layers);
+        deepCopy.Fitness = Fitness;
 
         for (int i = 0; i < _biases.Length; i++)
         {

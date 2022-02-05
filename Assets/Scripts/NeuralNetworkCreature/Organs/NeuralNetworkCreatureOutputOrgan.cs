@@ -6,7 +6,7 @@ using System.Linq;
 /// </summary>
 public class NeuralNetworkCreatureOutputOrgan : NeuralNetworkCreatureOrgan
 {
-	public NeuralNetworkCreatureVariable OutputValue { get; protected set; }
+	public NeuralNetworkCreatureVariable OutputValue;
 
 	/// <summary>
 	/// Iniitialize the organ with the given name.
@@ -17,12 +17,22 @@ public class NeuralNetworkCreatureOutputOrgan : NeuralNetworkCreatureOrgan
 		OutputValue = new NeuralNetworkCreatureVariable("OutputValue");
 	}
 
+	public virtual NeuralNetworkCreatureOrgan CreateDeepCopy(NeuralNetworkCreature creature)
+	{
+		NeuralNetworkCreatureOutputOrgan copy = new NeuralNetworkCreatureOutputOrgan();
+		copy.Initialize(creature, Type, OrganVariables.Values.ToList());
+		copy.MutatableVariable = MutatableVariable.Copy();
+
+		return copy;
+	}
+
 	public override NeuralNetworkCreatureOrgan CreateDeepCopy()
 	{
 		NeuralNetworkCreatureOutputOrgan copy = new NeuralNetworkCreatureOutputOrgan();
 		copy.Initialize(_creature, Type, OrganVariables.Values.ToList());
 		copy.MutatableVariable = MutatableVariable.Copy();
 		copy.OutputValue = OutputValue.Copy();
+
 		return copy;
 	}
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -13,12 +14,14 @@ public class HeartbeatInputOrgan : NeuralNetworkCreatureInputOrgan
 	{
 		base.Initialize(creature, type, variables);
 
-		NeuralNetworkCreatureVariable[] heartbeat = new NeuralNetworkCreatureVariable[2];
-
-		heartbeat[0] = new NeuralNetworkCreatureVariable("Lifetime", _lifetime);
-		heartbeat[1] = new NeuralNetworkCreatureVariable("Rhythm", Mathf.Sin(_lifetime));
-		OrganVariables.Add(heartbeat[0].Name, heartbeat[0]);
-		OrganVariables.Add(heartbeat[1].Name, heartbeat[1]);
+		if(variables == null || variables.Count == 0)
+		{
+			NeuralNetworkCreatureVariable[] heartbeat = new NeuralNetworkCreatureVariable[2];
+			heartbeat[0] = new NeuralNetworkCreatureVariable("Lifetime", _lifetime);
+			heartbeat[1] = new NeuralNetworkCreatureVariable("Rhythm", Mathf.Sin(_lifetime));
+			OrganVariables.Add(heartbeat[0].Name, heartbeat[0]);
+			OrganVariables.Add(heartbeat[1].Name, heartbeat[1]);
+		}
 	}
 
 	public override void UpdateSensors()
@@ -26,12 +29,5 @@ public class HeartbeatInputOrgan : NeuralNetworkCreatureInputOrgan
 		OrganVariables["Lifetime"].Value = _lifetime;
 		OrganVariables["Rhythm"].Value = Mathf.Sin(_lifetime);
 		_lifetime++;
-	}
-
-	public override NeuralNetworkCreatureOrgan CreateDeepCopy()
-	{
-		HeartbeatInputOrgan copy = base.CreateDeepCopy() as HeartbeatInputOrgan;
-		copy._lifetime = _lifetime;
-		return copy;
 	}
 }

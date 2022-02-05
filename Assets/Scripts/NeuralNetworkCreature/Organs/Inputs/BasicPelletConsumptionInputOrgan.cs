@@ -7,8 +7,11 @@ public class BasicPelletConsumptionInputOrgan : NeuralNetworkCreatureInputOrgan
 	{
 		base.Initialize(creature, type, variables);
 
-		NeuralNetworkCreatureVariable sensor = new NeuralNetworkCreatureVariable("HasEaten", 0);
-		OrganVariables.Add(sensor.Name, sensor);
+		if (variables == null || variables.Count == 0)
+		{
+			NeuralNetworkCreatureVariable sensor = new NeuralNetworkCreatureVariable("HasEaten", 0);
+			OrganVariables.Add(sensor.Name, sensor);
+		}
 
 		creature.OnCreatureCollision += OnCollision;
 	}
@@ -27,10 +30,5 @@ public class BasicPelletConsumptionInputOrgan : NeuralNetworkCreatureInputOrgan
 	public override void UpdateSensors()
 	{
 		OrganVariables["HasEaten"].Value = 0;
-	}
-
-	public override NeuralNetworkCreatureOrgan CreateDeepCopy()
-	{
-		return base.CreateDeepCopy();
 	}
 }

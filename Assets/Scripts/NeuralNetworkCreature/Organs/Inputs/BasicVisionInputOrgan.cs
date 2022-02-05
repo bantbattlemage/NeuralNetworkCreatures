@@ -12,22 +12,29 @@ public class BasicVisionInputOrgan : NeuralNetworkCreatureInputOrgan
 
 		MutatableVariable.Min = 0;
 		MutatableVariable.Max = GameController.Instance.WorldSize.x;
-		MutatableVariable.Value = variables[0].Value;
 
-		OrganVariables = new Dictionary<string, NeuralNetworkCreatureVariable>();
-
-		for (int i = 0; i < variables[1].Value; i++)
+		if(variables == null || variables.Count == 0)
 		{
-			string name = i.ToString();
-			OrganVariables.Add(name, new NeuralNetworkCreatureVariable(name));
+			OrganVariables.Add("0", new NeuralNetworkCreatureVariable("0"));
 		}
+		//else
+		//{
+		//	MutatableVariable.Value = variables[0].Value;
+		//	OrganVariables = new Dictionary<string, NeuralNetworkCreatureVariable>();
+
+		//	for (int i = 0; i < variables[1].Value; i++)
+		//	{
+		//		string name = i.ToString();
+		//		OrganVariables.Add(name, new NeuralNetworkCreatureVariable(name));
+		//	}
+		//}
 	}
 
 	public override void UpdateSensors()
 	{
 		for (int i = 0; i < OrganVariables.Count; i++)
 		{
-			Vector3 newVector = Quaternion.AngleAxis(i * (360f/ OrganVariables.Count), Vector3.up) * _creature.transform.forward;
+			Vector3 newVector = Quaternion.AngleAxis(i * (360f/OrganVariables.Count), Vector3.up) * _creature.transform.forward;
 			RaycastHit hit;
 			Ray ray = new Ray(_creature.transform.position + newVector, newVector);
 			//Debug.DrawRay(ray.origin, ray.direction, Color.red);
