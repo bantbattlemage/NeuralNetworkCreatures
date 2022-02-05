@@ -47,38 +47,35 @@ public class GameController : MonoBehaviour
 			NeuralNetworkCreature best = _creatures.OrderByDescending(x => x.Network.Fitness).First();
 			best.SaveToJson();
 		}
+	}
 
-		if (Input.GetKeyDown(KeyCode.L))
+	public void LoadCreature(string filePath)
+	{
+		CancelInvoke();
+		DestroyPellets();
+
+		foreach (NeuralNetworkCreature old in _creatures)
 		{
-			CancelInvoke();
-
-			string filePath = Application.persistentDataPath + "/newSavedCreature.json";
-
-			DestroyPellets();
-
-			foreach (NeuralNetworkCreature old in _creatures)
-			{
-				Destroy(old);
-				Destroy(old.gameObject);
-			}
-
-			_creatures = new List<NeuralNetworkCreature>();
-
-			for (int i = 0; i < Population; i++)
-			{
-				Vector3 randomCoords = GetRandomWorldCoordinates(5);
-				NeuralNetworkCreature newCreature = Instantiate(NeuralNetworkCreaturePrefab, randomCoords, new Quaternion()).GetComponent<NeuralNetworkCreature>();
-				newCreature.LoadFromJson(filePath);
-				newCreature.Mutate(MutationChance, MutationStrength);
-				_creatures.Add(newCreature);
-			}
-
-			_currentGeneration = 0;
-
-			SpawnPellets();
-
-			InvokeRepeating("IncrementSimulation", GenerationDuration, GenerationDuration);
+			Destroy(old);
+			Destroy(old.gameObject);
 		}
+
+		_creatures = new List<NeuralNetworkCreature>();
+
+		for (int i = 0; i < Population; i++)
+		{
+			Vector3 randomCoords = GetRandomWorldCoordinates(5);
+			NeuralNetworkCreature newCreature = Instantiate(NeuralNetworkCreaturePrefab, randomCoords, new Quaternion()).GetComponent<NeuralNetworkCreature>();
+			newCreature.LoadFromJson(filePath);
+			newCreature.Mutate(MutationChance, MutationStrength);
+			_creatures.Add(newCreature);
+		}
+
+		_currentGeneration = 0;
+
+		SpawnPellets();
+
+		InvokeRepeating("IncrementSimulation", GenerationDuration, GenerationDuration);
 	}
 
 	private void SpawnPellets()

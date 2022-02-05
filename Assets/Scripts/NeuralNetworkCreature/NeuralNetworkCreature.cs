@@ -79,30 +79,8 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		_internalLayerSize = network.Layers.Length - 2 > 0 ? network.Layers[1] : 0;
 
 		_inputOrgans = new Dictionary<string, NeuralNetworkCreatureInputOrgan>();
-		//foreach (NeuralNetworkCreatureInputOrgan o in inputOrgans)
-		//{
-		//	//NeuralNetworkCreatureOrgan copy = o.CreateDeepCopy(this);
-		//	o.SetCreature(this);
-		//	_inputOrgans.Add(o.Name, o);
-
-		//}
-
 		_outputOrgans = new Dictionary<string, NeuralNetworkCreatureOutputOrgan>();
-		//foreach (NeuralNetworkCreatureOutputOrgan o in outputOrgans)
-		//{
-		//	//NeuralNetworkCreatureOrgan copy = o.CreateDeepCopy(this);
-		//	o.SetCreature(this);
-		//	_outputOrgans.Add(o.Name, o);
-		//}
-
-		//_traits = new Dictionary<string, NeuralNetworkCreatureInheritableTrait>();
-		//foreach (NeuralNetworkCreatureInheritableTrait o in traits)
-		//{
-		//	NeuralNetworkCreatureInheritableTrait copy = o.CreateDeepCopy(this) as NeuralNetworkCreatureInheritableTrait;
-		//	copy.ApplyTraitValue();
-		//	_traits.Add(copy.Name, copy);
-		//}
-
+	
 		InitializeInputOrgans(inputOrgans);
 		InitializeOutputOrgans(outputOrgans);
 		InitializeTraits(traits);
