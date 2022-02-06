@@ -27,6 +27,16 @@ public class SpatialAwarenessInputOrgan : NeuralNetworkCreatureInputOrgan
 		}
 	}
 
+	public Vector2 GetWorldCoordinates()
+	{
+		return new Vector2(OrganVariables["X"].Value, OrganVariables["Z"].Value);
+	}
+
+	public Vector2Int GetWorldCoordinatesInt()
+	{
+		return new Vector2Int(Mathf.FloorToInt(OrganVariables["X"].Value), Mathf.FloorToInt(OrganVariables["Z"].Value));
+	}
+
 	public override void UpdateSensors()
 	{
 		foreach (NeuralNetworkCreatureVariable sensor in OrganVariables.Values)

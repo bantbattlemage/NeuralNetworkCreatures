@@ -103,6 +103,7 @@ GameObject:
   m_Component:
   - component: {fileID: 355100252491821483}
   - component: {fileID: 355100251633809788}
+  - component: {fileID: 940867181930170511}
   m_Layer: 0
   m_Name: SimulationWorld
   m_TagString: Untagged
@@ -123,6 +124,7 @@ Transform:
   m_Children:
   - {fileID: 355100251197393890}
   - {fileID: 1253101094813571446}
+  - {fileID: 9024066030322843431}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -138,10 +140,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a876c1fe49b6caa4f8a5422a55fc2dd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WorldOrigin: {fileID: 355100252491821483}
+  WorldOrigin: {fileID: 9024066030322843431}
   CenterPoint: {fileID: 1253101094813571446}
   WorldTilePrefab: {fileID: 9087642389516986133, guid: 2f5ff38b8c685604490591bdcdd55998, type: 3}
   SimulationInterval: 0.1
+--- !u!114 &940867181930170511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355100252491821480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9eeb1844a2ce2a54cb1073eb0908f139, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Colors:
+  - {r: 0.4245283, g: 0.40534654, b: 0.3984959, a: 1}
+  - {r: 0.38679248, g: 0.33276722, b: 0.31198826, a: 1}
+  - {r: 0.4433962, g: 0.330896, b: 0.29071733, a: 1}
+  - {r: 0.4528302, g: 0.27652875, b: 0.21573514, a: 1}
+  - {r: 0.41509432, g: 0.22986828, b: 0.16251333, a: 1}
+  - {r: 0.3773585, g: 0.19330724, b: 0.12281951, a: 1}
+  - {r: 0.3207547, g: 0.15337102, b: 0.08926664, a: 1}
+  - {r: 0.26415092, g: 0.11794714, b: 0.06354573, a: 1}
+  - {r: 0.18867922, g: 0.08085006, b: 0.04004984, a: 1}
+  - {r: 0.13207549, g: 0.05284003, b: 0.020558922, a: 1}
 --- !u!1 &986732232056925054
 GameObject:
   m_ObjectHideFlags: 0
@@ -171,4 +196,34 @@ Transform:
   m_Children: []
   m_Father: {fileID: 355100252491821483}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7954852478488593150
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9024066030322843431}
+  m_Layer: 0
+  m_Name: WorldOrigin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9024066030322843431
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7954852478488593150}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 355100252491821483}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

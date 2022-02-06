@@ -23,6 +23,7 @@ public class NeuralNetworkCreatureOrganScriptableObject : ScriptableObject
 				newOrgan = new SpatialAwarenessInputOrgan();
 				newOrgan.Initialize(creature, Organ, variables);
 				break;
+
 			case NeuralNetworkCreatureOrganType.BasicMovement:
 				newOrgan = new BasicMovementOutputOrgan();
 				newOrgan.Initialize(creature, Organ, variables);
@@ -43,6 +44,7 @@ public class NeuralNetworkCreatureOrganScriptableObject : ScriptableObject
 				newOrgan = new BasicPelletConsumptionInputOrgan();
 				newOrgan.Initialize(creature, Organ, variables);
 				break;
+
 			case NeuralNetworkCreatureOrganType.Photosynthesis:
 				newOrgan = new PhotosynthesisInputOrgan();
 				newOrgan.Initialize(creature, Organ, variables);
@@ -58,7 +60,14 @@ public class NeuralNetworkCreatureOrganScriptableObject : ScriptableObject
 			case NeuralNetworkCreatureOrganType.PlantReproduction:
 				newOrgan = new PlantReproductionOutputOrgan();
 				newOrgan.Initialize(creature, Organ, variables);
-				newOrgan.MutatableVariable.Value = Random.Range(2f, 8f);
+				//newOrgan.MutatableVariable.Value = Random.Range(2f, 8f);
+				break;
+			case NeuralNetworkCreatureOrganType.Roots:
+				newOrgan = new RootsOrgan();
+				newOrgan.Initialize(creature, Organ, variables);
+				//newOrgan.MutatableVariable.Value = Random.Range(0f, 1f);
+				//newOrgan.MutatableVariable.Min = 0f;
+				//newOrgan.MutatableVariable.Max = 1f;
 				break;
 			default:
 				throw new System.Exception("No Organ type defined");

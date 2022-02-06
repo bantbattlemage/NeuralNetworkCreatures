@@ -32,6 +32,8 @@ public class GameController : MonoBehaviour
 	private List<PelletObject> _pellets = new List<PelletObject>();
 
 	public static GameController Instance;
+	public bool Quitting = false;
+
 
 	private void Awake()
 	{
@@ -41,6 +43,11 @@ public class GameController : MonoBehaviour
 	private void Start()
 	{
 		InitializeGame();
+	}
+
+	private void OnApplicationQuit()
+	{
+		Quitting = true;
 	}
 
 	public void InitializeGame()
@@ -54,14 +61,14 @@ public class GameController : MonoBehaviour
 
 		for (int i = 0; i < Population; i++)
 		{
-			Vector3 randomCoords = GetRandomWorldCoordinates(5, 5);
+			Vector3 randomCoords = GetRandomWorldCoordinates();
 			Quaternion randomRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
 
 			NeuralNetworkCreature newCreature = Instantiate(NeuralNetworkCreaturePrefab, randomCoords, randomRotation).GetComponent<NeuralNetworkCreature>();
 			newCreature.Initialize();
 			newCreature.Network.Fitness = 0;
 
-			_creatures.Add(newCreature);
+			AddCreature(newCreature);
 		}
 
 		World.StartSimulation();
@@ -88,11 +95,11 @@ public class GameController : MonoBehaviour
 
 		for (int i = 0; i < Population; i++)
 		{
-			Vector3 randomCoords = GetRandomWorldCoordinates(5);
+			Vector3 randomCoords = GetRandomWorldCoordinates();
 			NeuralNetworkCreature newCreature = Instantiate(NeuralNetworkCreaturePrefab, randomCoords, new Quaternion()).GetComponent<NeuralNetworkCreature>();
 			newCreature.LoadFromJson(filePath);
 			newCreature.Mutate(MutationChance, MutationStrength);
-			_creatures.Add(newCreature);
+			AddCreature(newCreature);
 		}
 
 		_currentGeneration = 0;
@@ -108,7 +115,7 @@ public class GameController : MonoBehaviour
 
 		for (int i = 0; i < Population; i++)
 		{
-			Vector3 randomCoords = GetRandomWorldCoordinates(3, 3);
+			Vector3 randomCoords = GetRandomWorldCoordinates();
 			PelletObject newObject = Instantiate(PelletPrefab, randomCoords, new Quaternion()).GetComponent<PelletObject>();
 			_pellets.Add(newObject);
 		}
@@ -134,6 +141,7 @@ public class GameController : MonoBehaviour
 	public void AddCreature(NeuralNetworkCreature c)
 	{
 		_creatures.Add(c);
+		//c.CreatureDiedEvent += OnCreatureDeath;
 	}
 
 	public NeuralNetworkCreature GetRandomCreature()
@@ -158,14 +166,21 @@ public class GameController : MonoBehaviour
 		_creatures = new List<NeuralNetworkCreature>();
 	}
 
+	private void OnCreatureDeath(NeuralNetworkCreature creature)
+	{
+
+	}
+
 	public bool IsOutOfBounds(Vector3 vector)
 	{
-		return vector.x >= WorldSize / 2 || vector.x <= -(WorldSize / 2) || vector.z >= WorldSize / 2 || vector.z <= -(WorldSize / 2);
+		//return vector.x >= WorldSize / 2 || vector.x <= -(WorldSize / 2) || vector.z >= WorldSize / 2 || vector.z <= -(WorldSize / 2);
+		return vector.x > WorldSize || vector.x < 0 || vector.z > WorldSize || vector.z < 0;
 	}
 
 	public Vector3 GetRandomWorldCoordinates(int xOffset = 0, int yOffset = 0)
 	{
-		return new Vector3(Random.Range(0, WorldSize - xOffset) - WorldSize / 2, 0, Random.Range(0, WorldSize - yOffset) - WorldSize / 2);
+		//return new Vector3(Random.Range(0, WorldSize - xOffset) - WorldSize / 2, 0, Random.Range(0, WorldSize - yOffset) - WorldSize / 2);
+		return new Vector3(Random.Range(0, WorldSize - xOffset), 0, Random.Range(0, WorldSize - yOffset));
 	}
 
 	public float RollMutationFactor()

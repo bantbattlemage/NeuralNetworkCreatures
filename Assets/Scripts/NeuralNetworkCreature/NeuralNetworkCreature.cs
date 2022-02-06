@@ -24,7 +24,9 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 
 	//	Events
 	public delegate void CollisionEvent(Collision collision);
-	public CollisionEvent OnCreatureCollision;
+	public event CollisionEvent OnCreatureCollision;
+	public delegate void CreatureDeathEvent(NeuralNetworkCreature creature);
+	public event CreatureDeathEvent CreatureDiedEvent;
 
 	//	NeuralNetwork
 	public NeuralNetwork Network { get; protected set; }
@@ -312,6 +314,9 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 				case NeuralNetworkCreatureOrganType.EnergyStorage:
 					newOrgan = new EnergyStorageInputOrgan();
 					break;
+				case NeuralNetworkCreatureOrganType.Roots:
+					newOrgan = new RootsOrgan();
+					break;
 				default:
 					throw new Exception("not an inputorgan!");
 			}
@@ -461,8 +466,16 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	/// </summary>
 	private void OnDestroy()
 	{
+		if(GameController.Instance.Quitting)
+		{ 
+			return; 
+		}
+
 		GameController.Instance.World.SimulationUpdate -= OnSimulationOnUpdate;
 		Destroy(GetComponent<MeshRenderer>().material);
+
+		SpatialAwarenessInputOrgan locationOrgan = InputOrgans["SpatialAwareness"] as SpatialAwarenessInputOrgan;
+		GameController.Instance.World.GetWorldTile(locationOrgan.GetWorldCoordinatesInt()).AddSoilEnergy(1f);
 	}
 
 	/// <summary>

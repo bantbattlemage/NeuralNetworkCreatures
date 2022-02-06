@@ -8,16 +8,16 @@ using UnityEngine;
 public class EnergyStorageInputOrgan : NeuralNetworkCreatureInputOrgan
 {
 	private float _storedEnergy;
-	private float _storageCapacity;
-
+	private float _storageCapacity { get { return EnergyStorageDefaultValue + MutatableVariable.Value; } }
+	public float EnergyStorageDefaultValue { get { return 10f; } }
 
 	public override void Initialize(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, List<NeuralNetworkCreatureVariable> variables = null)
 	{
 		base.Initialize(creature, type, variables);
 
-		//if(variables == null || variables.Count == 0)
+		//if (variables == null || variables.Count == 0)
 		//{
-		//	NeuralNetworkCreatureVariable storage = new NeuralNetworkCreatureVariable("StoredEnergy", 1f);
+		//	NeuralNetworkCreatureVariable storage = new NeuralNetworkCreatureVariable("StorageCapaci", 1f);
 		//	storage.Min = 0;
 		//	storage.Max = 100 + (2 * MutatableVariable.Value);
 		//	OrganVariables.Add(storage.Name, storage);
@@ -43,8 +43,14 @@ public class EnergyStorageInputOrgan : NeuralNetworkCreatureInputOrgan
 			throw new System.Exception("negative energy!");
 		}
 
-		_storedEnergy += energyAmount;
-		//OrganVariables["StoredEnergy"].Value = energyAmount;
+		if(_storedEnergy + energyAmount >= _storageCapacity)
+		{
+			_storedEnergy = _storageCapacity;
+		}
+		else
+		{
+			_storedEnergy += energyAmount;
+		}
 	}
 
 	public float TakeEnergy(float requestedAmount)
@@ -55,20 +61,15 @@ public class EnergyStorageInputOrgan : NeuralNetworkCreatureInputOrgan
 		{
 			throw new System.Exception("negative energy!");
 		}
-
-		//if(energyAmount >= OrganVariables["StoredEnergy"].Value)
-		//{
-		//	energyAmount = OrganVariables["StoredEnergy"].Value;
-		//}
-
-		//OrganVariables["StoredEnergy"].Value -= energyAmount;
+		else if(requestedAmount == 0 || _storedEnergy == 0)
+		{
+			return 0;
+		}
 
 		if (requestedAmount >= _storedEnergy)
 		{
 			requestedAmount = _storedEnergy;
 		}
-
-		//OrganVariables["StoredEnergy"].Value -= energyAmount;
 
 		output = requestedAmount;
 		_storedEnergy -= requestedAmount;

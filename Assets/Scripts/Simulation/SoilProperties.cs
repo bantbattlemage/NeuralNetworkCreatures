@@ -4,6 +4,7 @@ public class SoilProperties
 {
 	public static float MaxSoilQuality { get { return 10f; } }
 	public static float MinSoilQuality { get { return 0f; } }
+	public static float DefaultSoilQuality { get { return MaxSoilQuality / 4f; } }
 
 	public float SoilQuality
 	{
@@ -19,23 +20,8 @@ public class SoilProperties
 
 	private float _soilQuality;
 
-	public void Initialize(float startValue)
+	public void Initialize(float startValue = 0f)
 	{
 		SoilQuality = startValue;
-	}
-
-	public float ExtractNutrients(float requestedAmount)
-	{
-		float output;
-
-		if(SoilQuality > requestedAmount)
-		{
-			requestedAmount = SoilQuality;
-		}
-
-		SoilQuality -= requestedAmount;
-		output = requestedAmount;
-
-		return output;
 	}
 }

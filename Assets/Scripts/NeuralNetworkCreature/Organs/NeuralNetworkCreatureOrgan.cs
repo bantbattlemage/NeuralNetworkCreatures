@@ -12,13 +12,17 @@ public class NeuralNetworkCreatureOrgan : INeuralNetworkCreatureOrgan
 
 	protected NeuralNetworkCreature _creature;
 
+	public static float DefaultMutatableVariableRange { get { return 5f; } }
+	public virtual float VariableMinValue { get { return -DefaultMutatableVariableRange; } }
+	public virtual float VariableMaxValue { get { return DefaultMutatableVariableRange; } }
+
 	public virtual void Initialize(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, List<NeuralNetworkCreatureVariable> variables = null)
 	{
 		_creature = creature;
 		Type = type;
 		Name = type.ToString();
 		OrganVariables = new Dictionary<string, NeuralNetworkCreatureVariable>();
-		MutatableVariable = new NeuralNetworkCreatureVariable("MutatableVariable", Random.Range(-1f, 1f), -5f, 5f);
+		MutatableVariable = new NeuralNetworkCreatureVariable("MutatableVariable", Random.Range(VariableMinValue, VariableMaxValue), VariableMinValue, VariableMaxValue);
 
 		if (variables != null)
 		{

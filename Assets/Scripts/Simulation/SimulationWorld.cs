@@ -21,8 +21,10 @@ public class SimulationWorld : MonoBehaviour
 	public void InitializeWorld(int worldSize)
 	{
 		SimulationTick = 0;
-		WorldOrigin.transform.position = new Vector3(-worldSize/2f, 0, -worldSize/2f);
-		CenterPoint.transform.localPosition = new Vector3(worldSize/2f, 0, worldSize/2f);
+		//WorldOrigin.transform.position = new Vector3(-worldSize/2f, 0, -worldSize/2f);
+		//CenterPoint.transform.localPosition = new Vector3(worldSize/2f, 0, worldSize/2f);
+		WorldOrigin.transform.position = Vector3.zero;
+		CenterPoint.transform.position = new Vector3(worldSize / 2f, 0, worldSize / 2f);
 		WorldTiles = new WorldTile[worldSize, worldSize];
 
 		for(int i = 0; i < worldSize; i++)
@@ -34,11 +36,6 @@ public class SimulationWorld : MonoBehaviour
 				WorldTiles[i, j] = newTile;
 			}
 		}
-	}
-
-	public Vector3 GetWorldCenterPoint()
-	{
-		return new Vector3(WorldTiles.Length / 2f, 0, WorldTiles.Length / 2f);
 	}
 
 	public void StartSimulation()
@@ -53,7 +50,18 @@ public class SimulationWorld : MonoBehaviour
 
 	public void StopSimulation()
 	{
+		CancelInvoke();
 
+		for (int i = 0; i < GameController.Instance.WorldSize; i++)
+		{
+			for (int j = 0; j < GameController.Instance.WorldSize; j++)
+			{
+				Destroy(WorldTiles[i, j]);
+				Destroy(WorldTiles[i, j].gameObject);
+			}
+		}
+
+		WorldTiles = null;
 	}
 
 	private void UpdateSimulation()
@@ -72,8 +80,8 @@ public class SimulationWorld : MonoBehaviour
 		return 1;
 	}
 
-	public SoilProperties GetSoilProperties(Vector2Int location)
+	public WorldTile GetWorldTile(Vector2Int location)
 	{
-		return WorldTiles[location.x, location.y].Soil;
+		return WorldTiles[location.x, location.y];
 	}
 }

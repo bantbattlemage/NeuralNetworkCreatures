@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class PlantGrowthOutputOrgan : NeuralNetworkCreatureOutputOrgan
 {
-	public static float MaxPlantGrowthHeight { get { return 100f; } }
-	public static float MinPlantGrowthHeight { get { return 0.1f; } }
-	public static float PlantGrowthConstant { get { return 0.001f; } }
-
 	public float Height = 0.1f;
 	private EnergyStorageInputOrgan _energyStorageReference;
+
+	public static float MaxPlantGrowthHeight { get { return 100f; } }
+	public static float MinPlantGrowthHeight { get { return 0.1f; } }
+	public static float PlantGrowthEfficiencyConstant { get { return 0.001f; } }
 
 	public override void Initialize(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, List<NeuralNetworkCreatureVariable> variables = null)
 	{
@@ -37,7 +37,7 @@ public class PlantGrowthOutputOrgan : NeuralNetworkCreatureOutputOrgan
 		}
 
 		float energy = _energyStorageReference.TakeEnergy(Mathf.Abs(outputValue * _creature.transform.localScale.y));
-		float growthFactor = (energy * MutatableVariable.Value * PlantGrowthConstant) / Mathf.Pow(_creature.transform.localScale.y, 2);
+		float growthFactor = (energy * MutatableVariable.Value * PlantGrowthEfficiencyConstant) / Mathf.Pow(_creature.transform.localScale.y, 2);
 
 		Height = Mathf.Clamp(_creature.transform.localScale.y + growthFactor, MinPlantGrowthHeight, MaxPlantGrowthHeight);
 

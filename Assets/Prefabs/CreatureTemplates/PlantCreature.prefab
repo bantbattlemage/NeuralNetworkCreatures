@@ -52,6 +52,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6e25ae30713383a48b135f79808930d1, type: 2}
   - {fileID: 11400000, guid: 0e7030af83730fe4f92dc70ecd50534d, type: 2}
   - {fileID: 11400000, guid: 56a6b87601ffcd449a8b43db1c74fb66, type: 2}
+  - {fileID: 11400000, guid: 00092d96fc9dc1e458683f16b6ceafcd, type: 2}
   OutputOrgansPrefabs:
   - {fileID: 11400000, guid: 86c99d38d4de75943a5574f1607dc8b2, type: 2}
   - {fileID: 11400000, guid: a81c7c60722e24043bf2b07645633d1e, type: 2}
