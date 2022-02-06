@@ -8,6 +8,9 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float MaxDistanceToTarget;
     [SerializeField] private float MinimumDistanceToTarget;
 
+    public Camera GameCamera { get { return _camera; } }
+    public bool Dragging { get { return _dragging; } }
+
     private Camera _camera;
     private float _currentDistance;
     private Vector3 _previousPosition;
@@ -31,7 +34,7 @@ public class CameraController : MonoBehaviour
             return;
 		}
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(1))
         {
             _previousPosition = _camera.ScreenToViewportPoint(Input.mousePosition);
 
@@ -63,7 +66,7 @@ public class CameraController : MonoBehaviour
             }
         }
 
-        if (((Input.GetMouseButton(0) && _dragging) || Input.mouseScrollDelta.y != 0) && !UIFunctions.IsPointerOverUI)
+        if (((Input.GetMouseButton(1) && _dragging) || Input.mouseScrollDelta.y != 0) && !UIFunctions.IsPointerOverUI)
         {
             Vector3 newPosition = _camera.ScreenToViewportPoint(Input.mousePosition);
             Vector3 direction = _previousPosition - newPosition;
@@ -74,7 +77,7 @@ public class CameraController : MonoBehaviour
 
             _camera.transform.position = Target.position;
 
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(1))
 			{
                 _camera.transform.Rotate(new Vector3(1, 0, 0), rotationAroundXAxis);
                 _camera.transform.Rotate(new Vector3(0, 1, 0), rotationAroundYAxis, Space.World);
@@ -83,7 +86,7 @@ public class CameraController : MonoBehaviour
             _camera.transform.Translate(new Vector3(0, 0, -_currentDistance));
         }
 
-        if (Input.GetMouseButtonUp(0) && _dragging)
+        if (Input.GetMouseButtonUp(1) && _dragging)
 		{
             _dragging = false;
 		}

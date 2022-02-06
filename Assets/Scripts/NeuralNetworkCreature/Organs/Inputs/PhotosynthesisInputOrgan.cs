@@ -6,10 +6,11 @@ public class PhotosynthesisInputOrgan : NeuralNetworkCreatureInputOrgan
 {
 	private EnergyStorageInputOrgan _energyStorageReference;
 	private SpatialAwarenessInputOrgan _spatialAwarenessReference;
+	private PlantGrowthOutputOrgan _growthReference;
 
 	public override float VariableMinValue { get { return 0f; } }
 	public override float VariableMaxValue { get { return 1f; } }
-	public static float PhotosynthesisEfficiencyConstant { get { return 0.1f; } }
+	public static float PhotosynthesisEfficiencyConstant { get { return 0.2f; } }
 	public static float PhotoreceptorMinValue { get { return 0f; } }
 	public static float PhotoreceptorMaxValue { get { return 1f; } }
 
@@ -32,10 +33,15 @@ public class PhotosynthesisInputOrgan : NeuralNetworkCreatureInputOrgan
 			_spatialAwarenessReference = _creature.InputOrgans["SpatialAwareness"] as SpatialAwarenessInputOrgan;
 		}
 
+		if (_growthReference == null)
+		{
+			_growthReference = _creature.OutputOrgans["PlantGrowth"] as PlantGrowthOutputOrgan;
+		}
+
 		float[] positionValues = _creature.InputOrgans["SpatialAwareness"].GetInputValues();
 
 		Vector2Int worldPosition = new Vector2Int(Mathf.FloorToInt(positionValues[0]), Mathf.FloorToInt(positionValues[1]));
-		float sunlightValue =  Mathf.Clamp(GameController.Instance.World.GetSunlightValue(worldPosition) * MutatableVariable.Value * PhotosynthesisEfficiencyConstant, PhotoreceptorMinValue, PhotoreceptorMaxValue);
+		float sunlightValue =  Mathf.Clamp(GameController.Instance.World.GetSunlightValue(worldPosition) * MutatableVariable.Value * PhotosynthesisEfficiencyConstant * _growthReference.Height, PhotoreceptorMinValue, PhotoreceptorMaxValue);
 
 		//	store energy equal to the photoreceptor value * this organ's mutatable varaible
 		OrganVariables["photoreceptor"].Value = sunlightValue;

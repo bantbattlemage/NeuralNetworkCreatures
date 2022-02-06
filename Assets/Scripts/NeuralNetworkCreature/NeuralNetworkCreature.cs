@@ -321,7 +321,7 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 					throw new Exception("not an inputorgan!");
 			}
 
-			newOrgan.Initialize(this, organ.Type, variables);
+			newOrgan.Initialize(this, organ.Type);
 			newOrgan.MutatableVariable = organ.MutatableVariable.Copy();
 
 			if (mutate)
@@ -476,6 +476,7 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 
 		SpatialAwarenessInputOrgan locationOrgan = InputOrgans["SpatialAwareness"] as SpatialAwarenessInputOrgan;
 		GameController.Instance.World.GetWorldTile(locationOrgan.GetWorldCoordinatesInt()).AddSoilEnergy(1f);
+		//Debug.Log(locationOrgan.GetWorldCoordinatesInt() + " " + GameController.Instance.World.GetWorldTile(locationOrgan.GetWorldCoordinatesInt()).GetSoilQuality());
 	}
 
 	/// <summary>

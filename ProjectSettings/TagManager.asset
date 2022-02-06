@@ -6,6 +6,7 @@ TagManager:
   tags:
   - NetworkObject
   - Pellet
+  - GroundTile
   layers:
   - Default
   - TransparentFX

@@ -12,13 +12,12 @@ public class WorldTile : MonoBehaviour
 	{
 		Location = location;
 		gameObject.transform.localPosition = new Vector3(location.x, 0, location.y);
-		//gameObject.transform.position = new Vector3(location.x, 0, location.y);
 		gameObject.name = location.ToString();
 
 		if(soil == null)
 		{
 			Soil = new SoilProperties();
-			Soil.Initialize(SoilProperties.DefaultSoilQuality);
+			Soil.Initialize(Random.Range(1f, 10f));
 			SetSoilColor();
 		}
 		else
@@ -27,6 +26,11 @@ public class WorldTile : MonoBehaviour
 		}
 
 		_initialized = true;
+	}
+
+	public float GetSoilQuality()
+	{
+		return Soil.SoilQuality;
 	}
 
 	public float ExtractSoilEnergy(float requestedAmount)

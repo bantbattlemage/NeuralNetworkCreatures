@@ -7,28 +7,28 @@ using UnityEngine;
 /// </summary>
 public class EnergyStorageInputOrgan : NeuralNetworkCreatureInputOrgan
 {
-	private float _storedEnergy;
-	private float _storageCapacity { get { return EnergyStorageDefaultValue + MutatableVariable.Value; } }
-	public float EnergyStorageDefaultValue { get { return 10f; } }
+	private float _storedEnergy = 0f;
+	public float StorageCapacity { get { return EnergyStorageDefaultValue + MutatableVariable.Value; } }
+	public float EnergyStorageDefaultValue { get { return 20f; } }
 
 	public override void Initialize(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, List<NeuralNetworkCreatureVariable> variables = null)
 	{
 		base.Initialize(creature, type, variables);
 
-		//if (variables == null || variables.Count == 0)
-		//{
-		//	NeuralNetworkCreatureVariable storage = new NeuralNetworkCreatureVariable("StorageCapaci", 1f);
-		//	storage.Min = 0;
-		//	storage.Max = 100 + (2 * MutatableVariable.Value);
-		//	OrganVariables.Add(storage.Name, storage);
-		//}
+		if (variables == null || variables.Count == 0)
+		{
+			NeuralNetworkCreatureVariable storage = new NeuralNetworkCreatureVariable("StoredEnergy", 0f);
+			storage.Min = 0;
+			storage.Max = StorageCapacity;
+			OrganVariables.Add(storage.Name, storage);
+		}
 
 		_storedEnergy = 1f;
 	}
 
 	public override void UpdateSensors()
 	{
-
+		OrganVariables["StoredEnergy"].Value = _storedEnergy;
 	}
 
 	public float GetEnergy()
@@ -43,9 +43,9 @@ public class EnergyStorageInputOrgan : NeuralNetworkCreatureInputOrgan
 			throw new System.Exception("negative energy!");
 		}
 
-		if(_storedEnergy + energyAmount >= _storageCapacity)
+		if(_storedEnergy + energyAmount >= StorageCapacity)
 		{
-			_storedEnergy = _storageCapacity;
+			_storedEnergy = StorageCapacity;
 		}
 		else
 		{

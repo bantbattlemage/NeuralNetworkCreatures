@@ -9,7 +9,10 @@ public class PlantGrowthOutputOrgan : NeuralNetworkCreatureOutputOrgan
 
 	public static float MaxPlantGrowthHeight { get { return 100f; } }
 	public static float MinPlantGrowthHeight { get { return 0.1f; } }
-	public static float PlantGrowthEfficiencyConstant { get { return 0.001f; } }
+	public static float PlantGrowthEfficiencyConstant { get { return 0.1f; } }
+
+	public override float VariableMinValue { get { return 0f; } }
+	public override float VariableMaxValue { get { return 1f; }}
 
 	public override void Initialize(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, List<NeuralNetworkCreatureVariable> variables = null)
 	{
@@ -20,6 +23,8 @@ public class PlantGrowthOutputOrgan : NeuralNetworkCreatureOutputOrgan
 			//NeuralNetworkCreatureVariable height = new NeuralNetworkCreatureVariable("Height", _creature.transform.localScale.y, 0.1f, 100f);
 			//OrganVariables.Add(height.Name, height);
 		}
+
+		_creature.transform.localScale = new Vector3(_creature.transform.localScale.x, Height, _creature.transform.localScale.z);
 	}
 
 	public override void Process()
@@ -36,7 +41,7 @@ public class PlantGrowthOutputOrgan : NeuralNetworkCreatureOutputOrgan
 			_energyStorageReference = _creature.InputOrgans["EnergyStorage"] as EnergyStorageInputOrgan;
 		}
 
-		float energy = _energyStorageReference.TakeEnergy(Mathf.Abs(outputValue * _creature.transform.localScale.y));
+		float energy = _energyStorageReference.TakeEnergy(outputValue * _creature.transform.localScale.y);
 		float growthFactor = (energy * MutatableVariable.Value * PlantGrowthEfficiencyConstant) / Mathf.Pow(_creature.transform.localScale.y, 2);
 
 		Height = Mathf.Clamp(_creature.transform.localScale.y + growthFactor, MinPlantGrowthHeight, MaxPlantGrowthHeight);

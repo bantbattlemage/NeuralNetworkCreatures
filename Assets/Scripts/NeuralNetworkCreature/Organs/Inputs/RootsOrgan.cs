@@ -9,7 +9,7 @@ public class RootsOrgan : NeuralNetworkCreatureInputOrgan
 
 	public override float VariableMinValue { get { return 0f; } }
 	public override float VariableMaxValue { get { return 1f; } }
-	public static float RootsEfficiencyConstant { get { return 0.5f; } }
+	public static float RootsEfficiencyConstant { get { return 0.75f; } }
 	public static float SoilReceptorMinValue { get { return 0f; } }
 	public static float SoilReceptorMaxValue { get { return 1f; } }
 

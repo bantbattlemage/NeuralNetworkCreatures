@@ -11,7 +11,7 @@ public class HeartbeatInputOrgan : NeuralNetworkCreatureInputOrgan
 	private float _lifetime = 0;
 	private EnergyStorageInputOrgan _energyStorageReference;
 
-	public static float LifetimeEnergyRequirementCoefficientConstant { get { return 0.005f; } }
+	public static float LifetimeEnergyRequirementCoefficientConstant { get { return 0.0001f; } }
 
 	public override void Initialize(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, List<NeuralNetworkCreatureVariable> variables = null)
 	{

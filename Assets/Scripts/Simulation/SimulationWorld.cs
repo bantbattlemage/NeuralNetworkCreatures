@@ -77,7 +77,7 @@ public class SimulationWorld : MonoBehaviour
 
 	public float GetSunlightValue(Vector2Int location)
 	{
-		return 1;
+		return 1f;
 	}
 
 	public WorldTile GetWorldTile(Vector2Int location)

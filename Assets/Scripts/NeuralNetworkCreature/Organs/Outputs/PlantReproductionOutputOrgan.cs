@@ -6,12 +6,12 @@ public class PlantReproductionOutputOrgan : NeuralNetworkCreatureOutputOrgan
 {
 	private EnergyStorageInputOrgan _energyStorageReference;
 
-	private float _energyToReproduce { get { return ReproductionEnergyRequirementConstant * Mathf.Pow(MutatableVariable.Value, 2); } }
+	private float _energyToReproduce { get { return  _energyStorageReference.StorageCapacity * ReproductionEnergyRequirementConstant; } }
 	private float _energyStored;
 
 	public override float VariableMinValue { get { return 1f; } }
 	public override float VariableMaxValue { get { return 5f; } }
-	public static float ReproductionEnergyRequirementConstant { get { return 1f; } }
+	public static float ReproductionEnergyRequirementConstant { get { return 0.5f; } }
 
 	public override void Initialize(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, List<NeuralNetworkCreatureVariable> variables = null)
 	{
@@ -41,10 +41,9 @@ public class PlantReproductionOutputOrgan : NeuralNetworkCreatureOutputOrgan
 			_energyStorageReference = _creature.InputOrgans["EnergyStorage"] as EnergyStorageInputOrgan;
 		}
 
-		if(_energyStorageReference.GetEnergy() >= MutatableVariable.Value * outputValue)
+		if(_energyStorageReference.GetEnergy() >= outputValue)
 		{
-			//Debug.LogWarning(_energyStorage.GetEnergy());
-			_energyStored += _energyStorageReference.TakeEnergy(MutatableVariable.Value * outputValue);
+			_energyStored += _energyStorageReference.TakeEnergy(outputValue);
 
 			if(_energyStored >= _energyToReproduce)
 			{
