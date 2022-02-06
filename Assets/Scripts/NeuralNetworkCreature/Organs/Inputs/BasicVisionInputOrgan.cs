@@ -11,7 +11,7 @@ public class BasicVisionInputOrgan : NeuralNetworkCreatureInputOrgan
 		base.Initialize(creature, type, variables);
 
 		MutatableVariable.Min = 0;
-		MutatableVariable.Max = GameController.Instance.WorldSize.x;
+		MutatableVariable.Max = GameController.Instance.WorldSize;
 
 		if(variables == null || variables.Count == 0)
 		{

@@ -9,6 +9,7 @@ using UnityEngine;
 public class HeartbeatInputOrgan : NeuralNetworkCreatureInputOrgan
 {
 	private float _lifetime = 0;
+	private EnergyStorageInputOrgan _energyStorageReference;
 
 	public override void Initialize(NeuralNetworkCreature creature, NeuralNetworkCreatureOrganType type, List<NeuralNetworkCreatureVariable> variables = null)
 	{
@@ -29,5 +30,17 @@ public class HeartbeatInputOrgan : NeuralNetworkCreatureInputOrgan
 		OrganVariables["Lifetime"].Value = _lifetime;
 		OrganVariables["Rhythm"].Value = Mathf.Sin(_lifetime);
 		_lifetime++;
+
+		if(_energyStorageReference == null)
+		{
+			_energyStorageReference = _creature.InputOrgans["EnergyStorage"] as EnergyStorageInputOrgan;
+		}
+
+		_energyStorageReference.TakeEnergy(_lifetime * 0.0015f);
+
+		if(_energyStorageReference.GetEnergy() <= 0)
+		{
+			GameController.Instance.KillCreature(_creature);
+		}
 	}
 }

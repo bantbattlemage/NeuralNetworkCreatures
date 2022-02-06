@@ -14,9 +14,9 @@ public class CameraController : MonoBehaviour
     private float _scrollFactor = 20;
     private bool _dragging = false;
 
-	private void Start()
+    public void InitializeCamera()
 	{
-        MaxDistanceToTarget = GameController.Instance.WorldSize.x;
+        MaxDistanceToTarget = GameController.Instance.WorldSize;
 
         _currentDistance = MaxDistanceToTarget;
         _camera = GetComponent<Camera>();

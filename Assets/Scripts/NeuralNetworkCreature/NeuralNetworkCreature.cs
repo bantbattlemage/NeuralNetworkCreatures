@@ -8,9 +8,9 @@ using UnityEngine;
 public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 {
 	[Header("Prefab Settings")]
-	public List<NeuralNetworkCreatureOrganScriptableObject> InputOrgans;
-	public List<NeuralNetworkCreatureOrganScriptableObject> OutputOrgans;
-	public List<NeuralNetworkCreatureOrganScriptableObject> InheritableTraits;
+	public List<NeuralNetworkCreatureOrganScriptableObject> InputOrgansPrefabs;
+	public List<NeuralNetworkCreatureOrganScriptableObject> OutputOrgansPrefabs;
+	public List<NeuralNetworkCreatureOrganScriptableObject> InheritableTraitPrefabs;
 
 	//	Internal variables
 	protected bool _initialized = false;
@@ -18,9 +18,9 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	protected int _internalLayerSize;
 
 	//	Organ dictionaries
-	public Dictionary<string, NeuralNetworkCreatureInputOrgan> _inputOrgans = new Dictionary<string, NeuralNetworkCreatureInputOrgan>();
-	public Dictionary<string, NeuralNetworkCreatureOutputOrgan> _outputOrgans = new Dictionary<string, NeuralNetworkCreatureOutputOrgan>();
-	public Dictionary<string, NeuralNetworkCreatureInheritableTrait> _traits = new Dictionary<string, NeuralNetworkCreatureInheritableTrait>();
+	public Dictionary<string, NeuralNetworkCreatureInputOrgan> InputOrgans = new Dictionary<string, NeuralNetworkCreatureInputOrgan>();
+	public Dictionary<string, NeuralNetworkCreatureOutputOrgan> OutputOrgans = new Dictionary<string, NeuralNetworkCreatureOutputOrgan>();
+	public Dictionary<string, NeuralNetworkCreatureInheritableTrait> Traits = new Dictionary<string, NeuralNetworkCreatureInheritableTrait>();
 
 	//	Events
 	public delegate void CollisionEvent(Collision collision);
@@ -48,6 +48,22 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	//	objectState.genericValues["NeuralNetworkCreature.StoredData"] = SaveUtils.ToJson(GetCreatureData());
 	//}
 
+	void Start()
+	{
+		transform.position += new Vector3(0, transform.localScale.y, 0);
+		GameController.Instance.World.SimulationUpdate += OnSimulationOnUpdate;
+	}
+
+	private void OnSimulationOnUpdate()
+	{
+		if(!_initialized)
+		{
+			return;
+		}
+
+		ProcessNetworkInputs();
+	}
+
 	/// <summary>
 	/// Initialize the creature with a new NeuralNetwork using default settings.
 	/// </summary>
@@ -56,12 +72,12 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		List<NeuralNetworkCreatureInputOrgan> inputOrgans = new List<NeuralNetworkCreatureInputOrgan>();
 		List<NeuralNetworkCreatureOutputOrgan> outputOrgans = new List<NeuralNetworkCreatureOutputOrgan>();
 
-		foreach(NeuralNetworkCreatureOrganScriptableObject o in InputOrgans)
+		foreach(NeuralNetworkCreatureOrganScriptableObject o in InputOrgansPrefabs)
 		{
 			inputOrgans.Add((NeuralNetworkCreatureInputOrgan)o.Instantiate(this));
 		}
 
-		foreach(NeuralNetworkCreatureOrganScriptableObject o in OutputOrgans)
+		foreach(NeuralNetworkCreatureOrganScriptableObject o in OutputOrgansPrefabs)
 		{
 			outputOrgans.Add((NeuralNetworkCreatureOutputOrgan)o.Instantiate(this));
 		}
@@ -78,8 +94,8 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		_internalLayers = network.Layers.Length - 2;
 		_internalLayerSize = network.Layers.Length - 2 > 0 ? network.Layers[1] : 0;
 
-		_inputOrgans = new Dictionary<string, NeuralNetworkCreatureInputOrgan>();
-		_outputOrgans = new Dictionary<string, NeuralNetworkCreatureOutputOrgan>();
+		InputOrgans = new Dictionary<string, NeuralNetworkCreatureInputOrgan>();
+		OutputOrgans = new Dictionary<string, NeuralNetworkCreatureOutputOrgan>();
 	
 		InitializeInputOrgans(inputOrgans);
 		InitializeOutputOrgans(outputOrgans);
@@ -120,13 +136,13 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		//	Initialize creature input organs
 		for(int i = 0; i < inputOrgans.Count; i++)
 		{
-			_inputOrgans.Add(inputOrgans[i].Name, inputOrgans[i]);
+			InputOrgans.Add(inputOrgans[i].Name, inputOrgans[i]);
 		}
 
 		//	Initialize creature output organs
 		for (int i = 0; i < outputOrgans.Count; i++)
 		{
-			_outputOrgans.Add(outputOrgans[i].Name, outputOrgans[i]);
+			OutputOrgans.Add(outputOrgans[i].Name, outputOrgans[i]);
 		}
 
 		_initialized = true;
@@ -148,23 +164,6 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 			_internalLayerSize = network.Layers[1];
 		}
 
-
-		////	Initialize creature input organs
-		//for (int i = 0; i < inputOrgans.Count; i++)
-		//{
-		//	inputOrgans[i].MutatableVariable = parent._outputOrgans[outputOrgans[i].Name].MutatableVariable.Copy();    //	set the internal organ modifier value to the parent's value
-		//	inputOrgans[i].Mutate();
-		//	_inputOrgans.Add(inputOrgans[i].Name, inputOrgans[i]);
-		//}
-
-		////	Initialize creauture output organs
-		//for (int i = 0; i < outputOrgans.Count; i++)
-		//{
-		//	outputOrgans[i].MutatableVariable = parent._outputOrgans[outputOrgans[i].Name].MutatableVariable.Copy();	//	set the internal organ modifier value to the parent's value
-		//	outputOrgans[i].Mutate();
-		//	_outputOrgans.Add(outputOrgans[i].Name, outputOrgans[i]);
-		//}
-
 		_initialized = true;
 	}
 
@@ -176,17 +175,29 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		NeuralNetworkCreatureData data = new NeuralNetworkCreatureData
 		{
 			Network = Network,
-			InputOrgans = _inputOrgans,
-			OutputOrgans = _outputOrgans,
-			Traits = _traits
+			InputOrgans = InputOrgans,
+			OutputOrgans = OutputOrgans,
+			Traits = Traits
 		};
 
 		return data;
 	}
 
-	/// <summary>
-	/// 
-	/// </summary>
+	public List<NeuralNetworkCreatureInheritableTrait> GetTraits()
+	{
+		return Traits.Values.ToList();
+	}
+
+	public List<NeuralNetworkCreatureInputOrgan> GetInputOrgans()
+	{
+		return InputOrgans.Values.ToList();
+	}
+
+	public List<NeuralNetworkCreatureOutputOrgan> GetOutputOrgans()
+	{
+		return OutputOrgans.Values.ToList();
+	}
+
 	public void SaveToJson(NeuralNetworkCreatureData data = null)
 	{
 		if(data == null)
@@ -270,7 +281,7 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 				newTrait.Mutate();
 			}
 
-			_traits.Add(newTrait.Name, newTrait);
+			Traits.Add(newTrait.Name, newTrait);
 		}
 	}
 
@@ -295,6 +306,12 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 				case NeuralNetworkCreatureOrganType.BasicPelletConsumption:
 					newOrgan = new BasicPelletConsumptionInputOrgan();
 					break;
+				case NeuralNetworkCreatureOrganType.Photosynthesis:
+					newOrgan = new PhotosynthesisInputOrgan();
+					break;
+				case NeuralNetworkCreatureOrganType.EnergyStorage:
+					newOrgan = new EnergyStorageInputOrgan();
+					break;
 				default:
 					throw new Exception("not an inputorgan!");
 			}
@@ -307,7 +324,7 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 				newOrgan.Mutate();
 			}
 
-			_inputOrgans.Add(newOrgan.Name, newOrgan);
+			InputOrgans.Add(newOrgan.Name, newOrgan);
 		}
 	}
 
@@ -326,8 +343,14 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 				case NeuralNetworkCreatureOrganType.BasicRotation:
 					newOrgan = new BasicRotationOutputOrgan();
 					break;
+				case NeuralNetworkCreatureOrganType.PlantReproduction:
+					newOrgan = new PlantReproductionOutputOrgan();
+					break;
+				case NeuralNetworkCreatureOrganType.PlantGrowth:
+					newOrgan = new PlantGrowthOutputOrgan();
+					break;
 				default:
-					throw new Exception("not an inputorgan!");
+					throw new Exception("not an output organ!");
 			}
 
 			newOrgan.Initialize(this, organ.Type, variables);
@@ -338,7 +361,7 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 				newOrgan.Mutate();
 			}
 
-			_outputOrgans.Add(newOrgan.Name, newOrgan);
+			OutputOrgans.Add(newOrgan.Name, newOrgan);
 		}
 	}
 
@@ -347,31 +370,13 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	/// </summary>
 	public void ApplyTraits()
 	{
-		foreach (NeuralNetworkCreatureOrganScriptableObject t in InheritableTraits)
+		foreach (NeuralNetworkCreatureOrganScriptableObject t in InheritableTraitPrefabs)
 		{
 			NeuralNetworkCreatureInheritableTrait trait = t.Instantiate(this, true);
 			trait.Mutate();
 			trait.ApplyTraitValue();
-			_traits.Add(trait.Name, trait);
+			Traits.Add(trait.Name, trait);
 		}
-	}
-
-	/// <summary>
-	/// Returns a list of InheritableTraits.
-	/// </summary>
-	public List<NeuralNetworkCreatureInheritableTrait> GetTraits()
-	{
-		return _traits.Values.ToList();
-	}
-
-	public List<NeuralNetworkCreatureInputOrgan> GetInputOrgans()
-	{
-		return _inputOrgans.Values.ToList();
-	}
-
-	public List<NeuralNetworkCreatureOutputOrgan> GetOutputOrgans()
-	{
-		return _outputOrgans.Values.ToList();
 	}
 
 	/// <summary>
@@ -381,7 +386,7 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	{
 		List<float> inputs = new List<float>();
 
-		foreach (NeuralNetworkCreatureInputOrgan organ in _inputOrgans.Values)
+		foreach (NeuralNetworkCreatureInputOrgan organ in InputOrgans.Values)
 		{
 			organ.UpdateSensors();
 			float[] organInputs = organ.GetInputValues();
@@ -394,18 +399,18 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 
 		float[] outputs = Network.FeedForward(inputs.ToArray());
 
-		if(outputs.Length != _outputOrgans.Count)
+		if(outputs.Length != OutputOrgans.Count)
 		{
 			throw new System.Exception("output length does not match organ count");
 		}
 
-		if(outputs.Length == 0 || _outputOrgans.Count == 0)
+		if(outputs.Length == 0 || OutputOrgans.Count == 0)
 		{
 			throw new Exception("no output organs!");
 		}
 
 		int j = 0;
-		foreach (NeuralNetworkCreatureOutputOrgan organ in _outputOrgans.Values)
+		foreach (NeuralNetworkCreatureOutputOrgan organ in OutputOrgans.Values)
 		{
 			organ.SetOutputValue(outputs[j]);
 			organ.Process();
@@ -421,7 +426,7 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	{
 		Network.Mutate(mutationChance, mutationStrength);
 
-		foreach (NeuralNetworkCreatureOutputOrgan o in _outputOrgans.Values)
+		foreach (NeuralNetworkCreatureOutputOrgan o in OutputOrgans.Values)
 		{
 			o.Mutate();
 		}
@@ -436,9 +441,9 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		NeuralNetworkCreature newCreature = Instantiate(gameObject, location, rotation).GetComponent<NeuralNetworkCreature>();
 		newCreature.Initialize(Network.CreateChildNetwork(otherParent.Network), this);
 		newCreature.Mutate(GameController.Instance.MutationChance, GameController.Instance.MutationStrength);
+		newCreature.gameObject.name = "NewCreature";
 		return newCreature;
 	}
-
 
 	/// <summary>
 	/// Triggers OnCreatureCollision event callback that organs can subscribe to
@@ -456,19 +461,20 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	/// </summary>
 	private void OnDestroy()
 	{
+		GameController.Instance.World.SimulationUpdate -= OnSimulationOnUpdate;
 		Destroy(GetComponent<MeshRenderer>().material);
 	}
 
 	/// <summary>
 	/// FixedUpdate loop processes the NeuralNetwork every FixedUpdate interval.
 	/// </summary>
-	private void FixedUpdate()
-	{
-		if (!_initialized)
-		{
-			return;
-		}
+	//private void FixedUpdate()
+	//{
+	//	if (!_initialized)
+	//	{
+	//		return;
+	//	}
 
-		ProcessNetworkInputs();
-	}
+	//	ProcessNetworkInputs();
+	//}
 }

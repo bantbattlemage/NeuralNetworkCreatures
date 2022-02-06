@@ -43,6 +43,23 @@ public class NeuralNetworkCreatureOrganScriptableObject : ScriptableObject
 				newOrgan = new BasicPelletConsumptionInputOrgan();
 				newOrgan.Initialize(creature, Organ, variables);
 				break;
+			case NeuralNetworkCreatureOrganType.Photosynthesis:
+				newOrgan = new PhotosynthesisInputOrgan();
+				newOrgan.Initialize(creature, Organ, variables);
+				break;
+			case NeuralNetworkCreatureOrganType.EnergyStorage:
+				newOrgan = new EnergyStorageInputOrgan();
+				newOrgan.Initialize(creature, Organ, variables);
+				break;
+			case NeuralNetworkCreatureOrganType.PlantGrowth:
+				newOrgan = new PlantGrowthOutputOrgan();
+				newOrgan.Initialize(creature, Organ, variables);
+				break;
+			case NeuralNetworkCreatureOrganType.PlantReproduction:
+				newOrgan = new PlantReproductionOutputOrgan();
+				newOrgan.Initialize(creature, Organ, variables);
+				newOrgan.MutatableVariable.Value = Random.Range(2f, 8f);
+				break;
 			default:
 				throw new System.Exception("No Organ type defined");
 		}

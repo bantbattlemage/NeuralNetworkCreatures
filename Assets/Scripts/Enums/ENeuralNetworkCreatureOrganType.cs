@@ -7,5 +7,10 @@ public enum NeuralNetworkCreatureOrganType
 	BasicMovement = 4,
 	BasicRotation = 5,
 	BasicVision = 6,
-	BasicPelletConsumption = 7
+	BasicPelletConsumption = 7,
+	Photosynthesis = 8,
+	EnergyStorage = 9,
+	PlantReproduction = 10,
+	PlantGrowth = 11,
+	Roots = 12,
 }

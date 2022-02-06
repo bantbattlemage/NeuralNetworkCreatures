@@ -18,7 +18,7 @@ public class NeuralNetworkCreatureOrgan : INeuralNetworkCreatureOrgan
 		Type = type;
 		Name = type.ToString();
 		OrganVariables = new Dictionary<string, NeuralNetworkCreatureVariable>();
-		MutatableVariable = new NeuralNetworkCreatureVariable("MutatableVariable", Random.Range(-1f, 1f));
+		MutatableVariable = new NeuralNetworkCreatureVariable("MutatableVariable", Random.Range(-1f, 1f), -5f, 5f);
 
 		if (variables != null)
 		{

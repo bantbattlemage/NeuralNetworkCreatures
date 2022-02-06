@@ -63,6 +63,4 @@ public class NeuralNetworkCreatureInputOrgan : NeuralNetworkCreatureOrgan
 
 		return value;
 	}
-
-
 }
