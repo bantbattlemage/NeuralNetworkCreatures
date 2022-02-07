@@ -6,6 +6,7 @@ public class PlantGrowthOutputOrgan : NeuralNetworkCreatureOutputOrgan
 {
 	public float Height = 0.1f;
 	private EnergyStorageInputOrgan _energyStorageReference;
+	private GameObject _bodyBaseReference;
 
 	public static float MaxPlantGrowthHeight { get { return 100f; } }
 	public static float MinPlantGrowthHeight { get { return 0.1f; } }
@@ -24,7 +25,8 @@ public class PlantGrowthOutputOrgan : NeuralNetworkCreatureOutputOrgan
 			//OrganVariables.Add(height.Name, height);
 		}
 
-		_creature.transform.localScale = new Vector3(_creature.transform.localScale.x, Height, _creature.transform.localScale.z);
+		_bodyBaseReference = _creature.transform.Find("PlantBodyBase").gameObject;
+		_bodyBaseReference.transform.localScale = new Vector3(_bodyBaseReference.transform.localScale.x, Height, _bodyBaseReference.transform.localScale.z);
 	}
 
 	public override void Process()
@@ -41,12 +43,12 @@ public class PlantGrowthOutputOrgan : NeuralNetworkCreatureOutputOrgan
 			_energyStorageReference = _creature.InputOrgans["EnergyStorage"] as EnergyStorageInputOrgan;
 		}
 
-		float energy = _energyStorageReference.TakeEnergy(outputValue * _creature.transform.localScale.y);
-		float growthFactor = (energy * MutatableVariable.Value * PlantGrowthEfficiencyConstant) / Mathf.Pow(_creature.transform.localScale.y, 2);
+		float energy = _energyStorageReference.TakeEnergy(outputValue * _bodyBaseReference.transform.localScale.y);
+		float growthFactor = (energy * MutatableVariable.Value * PlantGrowthEfficiencyConstant) / Mathf.Pow(_bodyBaseReference.transform.localScale.y, 2);
 
-		Height = Mathf.Clamp(_creature.transform.localScale.y + growthFactor, MinPlantGrowthHeight, MaxPlantGrowthHeight);
+		Height = Mathf.Clamp(_bodyBaseReference.transform.localScale.y + growthFactor, MinPlantGrowthHeight, MaxPlantGrowthHeight);
 
-		_creature.transform.localScale = new Vector3(_creature.transform.localScale.x, Height, _creature.transform.localScale.z);
-		_creature.transform.localPosition = new Vector3(_creature.transform.position.x, _creature.transform.localScale.y, _creature.transform.position.z);
+		_bodyBaseReference.transform.localScale = new Vector3(_bodyBaseReference.transform.localScale.x, Height, _bodyBaseReference.transform.localScale.z);
+		_bodyBaseReference.transform.position = new Vector3(_bodyBaseReference.transform.position.x, Height, _bodyBaseReference.transform.position.z);
 	}
 }

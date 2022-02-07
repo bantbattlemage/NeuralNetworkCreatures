@@ -52,7 +52,6 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 
 	void Start()
 	{
-		transform.position += new Vector3(0, transform.localScale.y, 0);
 		GameController.Instance.World.SimulationUpdate += OnSimulationOnUpdate;
 	}
 
@@ -472,7 +471,12 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		}
 
 		GameController.Instance.World.SimulationUpdate -= OnSimulationOnUpdate;
-		Destroy(GetComponent<MeshRenderer>().material);
+
+		MeshRenderer[] children = transform.GetComponentsInChildren<MeshRenderer>();
+		foreach (MeshRenderer r in children)
+		{
+			Destroy(r.material);
+		}
 
 		SpatialAwarenessInputOrgan locationOrgan = InputOrgans["SpatialAwareness"] as SpatialAwarenessInputOrgan;
 		GameController.Instance.World.GetWorldTile(locationOrgan.GetWorldCoordinatesInt()).AddSoilEnergy(1f);

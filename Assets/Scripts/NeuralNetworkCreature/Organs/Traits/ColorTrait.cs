@@ -33,11 +33,10 @@ public class ColorTrait : NeuralNetworkCreatureInheritableTrait
 
 	public override void ApplyTraitValue()
 	{
-		MeshRenderer r = _creature.transform.GetComponent<MeshRenderer>();
-
-		if(r.material != null)
+		MeshRenderer[] children = _creature.transform.GetComponentsInChildren<MeshRenderer>();
+		foreach(MeshRenderer r in children)
 		{
-			_creature.transform.GetComponent<MeshRenderer>().material.SetColor("_Color", _colorValue);
+			r.material.SetColor("_Color", _colorValue);
 		}
 	}
 
