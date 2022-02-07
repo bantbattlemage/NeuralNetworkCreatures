@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PlantGrowthOutputOrgan : NeuralNetworkCreatureOutputOrgan
 {
-	public float Height = 0.1f;
+	public float Height { get { return _bodyBaseReference.GetTotalHeight(); } }
 	private EnergyStorageInputOrgan _energyStorageReference;
-	private GameObject _bodyBaseReference;
+	private PlantBodyBaseSection _bodyBaseReference;
 
 	public static float MaxPlantGrowthHeight { get { return 100f; } }
 	public static float MinPlantGrowthHeight { get { return 0.1f; } }
@@ -25,8 +25,9 @@ public class PlantGrowthOutputOrgan : NeuralNetworkCreatureOutputOrgan
 			//OrganVariables.Add(height.Name, height);
 		}
 
-		_bodyBaseReference = _creature.transform.Find("PlantBodyBase").gameObject;
+		_bodyBaseReference = _creature.transform.Find("PlantBodyBase").GetComponent<PlantBodyBaseSection>();
 		_bodyBaseReference.transform.localScale = new Vector3(_bodyBaseReference.transform.localScale.x, Height, _bodyBaseReference.transform.localScale.z);
+		_bodyBaseReference.Height = Height;
 	}
 
 	public override void Process()
@@ -43,12 +44,9 @@ public class PlantGrowthOutputOrgan : NeuralNetworkCreatureOutputOrgan
 			_energyStorageReference = _creature.InputOrgans["EnergyStorage"] as EnergyStorageInputOrgan;
 		}
 
-		float energy = _energyStorageReference.TakeEnergy(outputValue * _bodyBaseReference.transform.localScale.y);
-		float growthFactor = (energy * MutatableVariable.Value * PlantGrowthEfficiencyConstant) / Mathf.Pow(_bodyBaseReference.transform.localScale.y, 2);
+		float energy = _energyStorageReference.TakeEnergy(outputValue * _bodyBaseReference.GetTotalHeight());
+		float growthFactor = (energy * MutatableVariable.Value * PlantGrowthEfficiencyConstant) / Mathf.Pow(_bodyBaseReference.GetTotalHeight(), 2);
 
-		Height = Mathf.Clamp(_bodyBaseReference.transform.localScale.y + growthFactor, MinPlantGrowthHeight, MaxPlantGrowthHeight);
-
-		_bodyBaseReference.transform.localScale = new Vector3(_bodyBaseReference.transform.localScale.x, Height, _bodyBaseReference.transform.localScale.z);
-		_bodyBaseReference.transform.position = new Vector3(_bodyBaseReference.transform.position.x, Height, _bodyBaseReference.transform.position.z);
+		_bodyBaseReference.Grow(growthFactor);
 	}
 }

@@ -5,7 +5,6 @@ public class WorldTile : MonoBehaviour
 	public Vector2Int Location;
 	protected SoilProperties Soil;
 
-	private bool _initialized = false;
 	private MeshRenderer _meshRendererReference;
 
 	public void Initialize(Vector2Int location, SoilProperties soil = null)
@@ -24,8 +23,6 @@ public class WorldTile : MonoBehaviour
 		{
 			Soil = soil;
 		}
-
-		_initialized = true;
 	}
 
 	public float GetSoilQuality()

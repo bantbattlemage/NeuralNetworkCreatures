@@ -25,8 +25,8 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	//	Events
 	public delegate void CollisionEvent(Collision collision);
 	public event CollisionEvent OnCreatureCollision;
-	public delegate void CreatureDeathEvent(NeuralNetworkCreature creature);
-	public event CreatureDeathEvent CreatureDiedEvent;
+	//public delegate void CreatureDeathEvent(NeuralNetworkCreature creature);
+	//public event CreatureDeathEvent CreatureDiedEvent;
 
 	//	NeuralNetwork
 	public NeuralNetwork Network { get; protected set; }
