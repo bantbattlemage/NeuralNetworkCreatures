@@ -55,6 +55,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a81c7c60722e24043bf2b07645633d1e, type: 2}
   InheritableTraitPrefabs:
   - {fileID: 11400000, guid: d8424bd80e3e3b7468c5e637feb81085, type: 2}
+  - {fileID: 11400000, guid: 2c5a78c23d5ffae4fa3e1ed4d81379d0, type: 2}
   StoredData:
     Network:
       Fitness: 0

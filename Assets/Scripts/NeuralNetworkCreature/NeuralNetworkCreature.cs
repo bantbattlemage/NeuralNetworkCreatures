@@ -97,10 +97,10 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 
 		InputOrgans = new Dictionary<string, NeuralNetworkCreatureInputOrgan>();
 		OutputOrgans = new Dictionary<string, NeuralNetworkCreatureOutputOrgan>();
-	
+
+		InitializeTraits(traits);
 		InitializeInputOrgans(inputOrgans);
 		InitializeOutputOrgans(outputOrgans);
-		InitializeTraits(traits);
 
 		_initialized = true;
 	}
@@ -110,15 +110,6 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	/// </summary>
 	public void Initialize(List<NeuralNetworkCreatureInputOrgan> inputOrgans, List<NeuralNetworkCreatureOutputOrgan> outputOrgans, List<NeuralNetworkCreatureInheritableTrait> traits = null, int internalLayers = 2, int internalLayerSize = 8)
 	{
-		if (traits != null)
-		{
-			InitializeTraits(traits);
-		}
-		else
-		{
-			ApplyTraits();
-		}
-
 		//	Create the Neural Network
 		_internalLayers = internalLayers;
 		_internalLayerSize = internalLayerSize;
@@ -146,6 +137,15 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 			OutputOrgans.Add(outputOrgans[i].Name, outputOrgans[i]);
 		}
 
+		if (traits != null)
+		{
+			InitializeTraits(traits);
+		}
+		else
+		{
+			ApplyTraits();
+		}
+
 		_initialized = true;
 	}
 
@@ -154,9 +154,9 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 	/// </summary>
 	public void Initialize(NeuralNetwork network, NeuralNetworkCreature parent)
 	{
-		InitializeTraits(parent.GetTraits());
 		InitializeInputOrgans(parent.GetInputOrgans());
 		InitializeOutputOrgans(parent.GetOutputOrgans());
+		InitializeTraits(parent.GetTraits());
 
 		Network = network;
 		_internalLayers = network.Layers.Length - 2;
@@ -266,14 +266,16 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 			switch (trait.Type)
 			{
 				case NeuralNetworkCreatureOrganType.ColorTrait:
-					ColorTrait c = new ColorTrait();
-					c.Initialize(this, trait.Type, trait.OrganVariables.Values.ToList());
-					c.MutatableVariable = trait.MutatableVariable.Copy();
-					c.ApplyTraitValue();
-					newTrait = c;
+					newTrait = new ColorTrait();
+					newTrait.Initialize(this, trait.Type, trait.OrganVariables.Values.ToList());
+					newTrait.MutatableVariable = trait.MutatableVariable.Copy();
+					break;
+				case NeuralNetworkCreatureOrganType.LeafTrait:
+					newTrait = new LeafTrait();
+					newTrait.Initialize(this, trait.Type, trait.OrganVariables.Values.ToList());
+					newTrait.MutatableVariable = trait.MutatableVariable.Copy();
 					break;
 				default:
-					//newTrait = trait.CreateDeepCopy(this) as NeuralNetworkCreatureInheritableTrait;
 					throw new Exception("not a trait!");
 			}
 
@@ -283,6 +285,7 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 			}
 
 			Traits.Add(newTrait.Name, newTrait);
+			newTrait.ApplyTraitValue();
 		}
 	}
 
@@ -377,9 +380,9 @@ public class NeuralNetworkCreature : MonoBehaviour, INeuralNetworkCreature
 		foreach (NeuralNetworkCreatureOrganScriptableObject t in InheritableTraitPrefabs)
 		{
 			NeuralNetworkCreatureInheritableTrait trait = t.Instantiate(this, true);
+			Traits.Add(trait.Name, trait);
 			trait.Mutate();
 			trait.ApplyTraitValue();
-			Traits.Add(trait.Name, trait);
 		}
 	}
 

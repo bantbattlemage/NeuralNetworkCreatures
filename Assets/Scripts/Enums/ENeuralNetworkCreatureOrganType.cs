@@ -13,4 +13,5 @@ public enum NeuralNetworkCreatureOrganType
 	PlantReproduction = 10,
 	PlantGrowth = 11,
 	Roots = 12,
+	LeafTrait = 13,
 }

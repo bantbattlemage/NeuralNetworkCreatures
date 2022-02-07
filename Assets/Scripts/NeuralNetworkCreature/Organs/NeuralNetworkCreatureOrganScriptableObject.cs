@@ -91,6 +91,9 @@ public class NeuralNetworkCreatureOrganScriptableObject : ScriptableObject
 			case NeuralNetworkCreatureOrganType.ColorTrait:
 				newOrgan = new ColorTrait();
 				break;
+			case NeuralNetworkCreatureOrganType.LeafTrait:
+				newOrgan = new LeafTrait();
+				break;
 			default:
 				throw new System.Exception("No Organ type defined");
 		}

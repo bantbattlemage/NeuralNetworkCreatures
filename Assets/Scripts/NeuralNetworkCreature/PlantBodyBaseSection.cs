@@ -9,29 +9,35 @@ public class PlantBodyBaseSection : MonoBehaviour
 	public Transform[] AttachmentTransforms;
 
 	public GameObject Model;
+	public float Height;
+	public int NumberOfLeaves;
 
 	public Dictionary<string, Transform> AttachmentPoints = new Dictionary<string, Transform>();
 	public Dictionary<string, GameObject> Attachments = new Dictionary<string, GameObject>();
-	public List<PlantBodyBaseSection> HeightSections = new List<PlantBodyBaseSection>();
+	public PlantBodyBaseSection SubSection = null;
 
-	public float Height;
 	public static float BaseSectionMinSize { get { return 0.1f; } }
 	public static float BaseSectionMaxSize { get { return 1f; } }
 
-	private void Start()
+	private void Awake()
 	{
-		Height = BaseSectionMinSize;
-		transform.localScale = new Vector3(transform.localScale.x, Height, transform.localScale.z);
-
 		AttachmentPoints.Add("Top", AttachmentTransforms[0]);
 		AttachmentPoints.Add("Bottom", AttachmentTransforms[1]);
 		AttachmentPoints.Add("Front", AttachmentTransforms[2]);
 		AttachmentPoints.Add("Back", AttachmentTransforms[3]);
 		AttachmentPoints.Add("Left", AttachmentTransforms[4]);
 		AttachmentPoints.Add("Right", AttachmentTransforms[5]);
+	}
 
-		int r = Random.Range(0, 4);
-		for(int i = 0; i < r; i++)
+	private void Start()
+	{
+		Height = BaseSectionMinSize;
+		transform.localScale = new Vector3(transform.localScale.x, Height, transform.localScale.z);
+	}
+
+	public void InitializeLeaves(int numberOfLeaves)
+	{
+		for (int i = 0; i < numberOfLeaves; i++)
 		{
 			AddLeaf();
 		}
@@ -63,9 +69,9 @@ public class PlantBodyBaseSection : MonoBehaviour
 	{
 		float sum = Height;
 
-		foreach(PlantBodyBaseSection subSection in HeightSections)
+		if(SubSection != null)
 		{
-			sum += subSection.GetTotalHeight();
+			sum += SubSection.GetTotalHeight();
 		}
 
 		return sum;
@@ -73,9 +79,9 @@ public class PlantBodyBaseSection : MonoBehaviour
 
 	public void Grow(float growthValue)
 	{
-		if(HeightSections.Count > 0)
+		if(SubSection != null)
 		{
-			HeightSections[HeightSections.Count - 1].Grow(growthValue);
+			SubSection.Grow(growthValue);
 			return;
 		}
 
@@ -84,10 +90,11 @@ public class PlantBodyBaseSection : MonoBehaviour
 		if(newHeight > BaseSectionMaxSize)
 		{
 			Height = BaseSectionMaxSize;
-			GameObject newSection = Instantiate(BasePrefabReference, AttachmentPoints["Top"]);
+			PlantBodyBaseSection newSection = Instantiate(BasePrefabReference, AttachmentPoints["Top"]).GetComponent<PlantBodyBaseSection>();
 			newSection.transform.localScale = new Vector3(newSection.transform.localScale.x, BaseSectionMinSize, newSection.transform.localScale.z);
 			newSection.transform.localPosition = new Vector3(0, BaseSectionMinSize, 0);
-			HeightSections.Add(newSection.GetComponent<PlantBodyBaseSection>());
+			newSection.InitializeLeaves(NumberOfLeaves);
+			SubSection = newSection;
 		}
 		else
 		{
